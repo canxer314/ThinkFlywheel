@@ -1,6 +1,6 @@
 # 定制指南
 
-> ThinkFlywheel 被设计为可修改的。SCHEMA.md 定义数据模型, AGENTS.md 定义 AI 行为。两者分离是故意的——改数据模型动 SCHEMA, 改行为动 AGENTS。
+> ThinkFlywheel 被设计为可修改的。SCHEMA.md 定义数据模型（按需参考）, `.claude/rules/` 中的规则文件定义 AI 行为（自动加载至 ground truth 层）。AGENTS.md 保留为跨工具兼容的完整规则文件。改数据模型动 SCHEMA, 改行为动 `.claude/rules/` 和 AGENTS.md。
 >
 > **重要原则**：先用默认配置至少 2 周。你需要知道默认系统"什么感觉", 才知道该改什么。
 
@@ -24,7 +24,7 @@
 
 2. 更新 `vault/SCHEMA.md` 的 §5 通用 Frontmatter 规范, 在字段表中加入 `estimated_hours`。
 
-3. 告诉 Claude：`我已更新 task 模板, 请更新 SCHEMA.md 文档记录新字段, 并更新 AGENTS.md 让你知道在创建任务时提示填写预估时间。`
+3. 告诉 Claude：`我已更新 task 模板, 请更新 SCHEMA.md 文档记录新字段, 并更新 .claude/rules/writing.md 和 AGENTS.md 让你知道在创建任务时提示填写预估时间。`
 
 ### 示例：添加新卡片类型（如 type/recipe）
 
@@ -167,7 +167,7 @@ arguments:
 
 ## 6. Claude Code 行为调优
 
-`vault/AGENTS.md` §2 分层自主权控制 AI 的胆量。
+`vault/.claude/rules/autonomy.md` 分层自主权控制 AI 的胆量。
 
 ### 让 AI 更自主
 
@@ -181,7 +181,7 @@ arguments:
 
 ### 改索引维护频率
 
-AGENTS.md §3.4 写的是"每次创建/修改卡片后更新"。如果你觉得太频繁：
+`.claude/rules/workflows.md` 写的是"每次创建/修改卡片后更新"。如果你觉得太频繁：
 ```
 每天结束时批量更新 index.md 和 MOC, 而不是每次操作后立即更新
 ```

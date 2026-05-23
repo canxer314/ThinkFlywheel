@@ -18,23 +18,23 @@ claude
 ```
 确认 `vault/.claude/skills/` 下有 10 个技能目录。如果技能确实存在但 Claude 不识别，重启 Claude Code 试试。
 
-### Claude 不自动读取 SCHEMA.md / AGENTS.md
+### Claude 不遵守操作规则（目录、权限、写作等）
 
-**原因**：`vault/CLAUDE.md` 桥接配置可能损坏或不存在。
+**原因**：`vault/.claude/rules/` 中的规则文件可能缺失或损坏。
 
-**修复**：确认 `vault/CLAUDE.md` 存在且包含启动流程说明（读取 SCHEMA.md → AGENTS.md → index.md → log.md）。文件内容正确的话，重新启动 Claude Code。
+**修复**：确认 `vault/.claude/rules/` 下有 6 个规则文件（iron-laws.md / autonomy.md / writing.md / workflows.md / card-types.md / structure.md）。文件完整的话，重新启动 Claude Code。
 
 ### Claude 把文件创建到了错误目录
 
-**原因**：SCHEMA.md 未被正确读取，导致 Claude 不知道目录规范。
+**原因**：`.claude/rules/structure.md` 和 `card-types.md` 中的目录与命名规范未被正确加载。
 
-**修复**：明确告诉 Claude：`先读取 SCHEMA.md 和 AGENTS.md，然后重新执行刚才的操作。`
+**修复**：检查 `.claude/rules/` 目录是否存在且文件完整。确认后重启 Claude Code。
 
 ### Claude 未经确认就创建了知识卡片
 
-**原因**：AGENTS.md 中的双提议规则未被遵守。
+**原因**：`.claude/rules/iron-laws.md` 中的铁律 1（双提议）或 `autonomy.md` 中的权限矩阵未被遵守。
 
-**修复**：提醒 Claude：`按照 AGENTS.md 铁律 1，知识类卡片必须先提议、获确认后才能写入。` 如果是 Claude 误判了卡片类型（把 insight 当 reading 处理了），手动纠正即可。
+**修复**：提醒 Claude：`按照铁律 1，知识类卡片必须先提议、获确认后才能写入。` 如果是 Claude 误判了卡片类型（把 insight 当 reading 处理了），手动纠正即可。
 
 ---
 

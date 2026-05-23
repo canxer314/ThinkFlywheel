@@ -71,7 +71,7 @@ claude
 
 ## 3. 首次启动：验证一切就绪
 
-Claude Code 启动后会自动读取 `SCHEMA.md`、`AGENTS.md`、`index.md`、`log.md`。测试以下命令确认系统正常：
+Claude Code 启动后自动加载 `vault/.claude/rules/` 中的操作规则（铁律、权限矩阵、卡片类型、写作规范、目录结构、工作流）。`SCHEMA.md` 和 `AGENTS.md` 作为参考文档按需查询。测试以下命令确认系统正常：
 
 | 命令 | 预期结果 |
 |------|---------|
@@ -219,7 +219,7 @@ Claude 分析"问题与吐槽"（这次可能是空的或很少），然后**双
 逐项打勾，确保系统运转正常：
 
 - [ ] Obsidian 打开 vault 显示完整目录结构
-- [ ] Claude Code 在 vault 目录启动，自动读取 SCHEMA.md
+- [ ] Claude Code 在 vault 目录启动，自动加载 .claude/rules/ 中的操作规则
 - [ ] `/task` 在 `Tasks/active/` 中创建带完整 frontmatter 的笔记
 - [ ] `/briefing` 生成 `Daily/YYYY-MM-DD.md`
 - [ ] `/retro` 分析任务并双提议知识卡片

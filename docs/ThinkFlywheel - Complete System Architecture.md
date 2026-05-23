@@ -503,9 +503,9 @@ What to build:
 4. Write AGENTS.md (agent rules: when to write, when to propose, when to be silent)
 5. Create all 6 card templates in Templates/ as Obsidian templates
 6. Set up index.md and log.md as empty files (AI will populate)
-7. Configure .claude/settings.json to auto-load SCHEMA.md and AGENTS.md
+7. Create .claude/rules/ files (iron-laws, autonomy, writing, workflows, card-types, structure) for automatic ground-truth rule loading
 
-Verification: AI can read SCHEMA.md and correctly identify card types.
+Verification: AI automatically follows operational rules without manual file reads; can correctly identify card types and directory conventions.
 
 Phase 1: Bulletproof Notes (Week 1-2)
 
