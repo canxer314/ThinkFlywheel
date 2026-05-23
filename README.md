@@ -49,8 +49,9 @@ ThinkFlywheel 是一套运行在 Obsidian + Claude Code 上的个人工作与生
 cd vault
 claude
 
-# 2. Claude Code 启动后自动读取 SCHEMA.md + AGENTS.md。验证:
-"SCHEMA.md 里定义了哪些卡片类型？"
+# 2. Claude Code 启动后自动加载 .claude/rules/ 中的操作规则（铁律、权限、写作规范、
+#    卡片类型、目录结构、工作流）。SCHEMA.md 和 AGENTS.md 作为参考文档按需查询。验证:
+"系统里定义了哪些卡片类型？"
 # 预期: Claude 列举 9 种卡片类型
 
 # 3. 创建第一个防弹任务笔记
@@ -279,10 +280,18 @@ ThinkFlywheel 的 10 个技能管理的是**人的工作和生活**。搭配以�
 ```
 vault/
 ├── SCHEMA.md              # 系统宪法 — 类型、标签、命名规范、权限矩阵
-├── AGENTS.md              # AI Agent 行为规则（5 条铁律）
+├── AGENTS.md              # AI Agent 行为规则（跨工具兼容）
 ├── CLAUDE.md              # Claude Code 桥接配置
 ├── index.md               # 内容索引（AI 自动维护）
 ├── log.md                 # 时间线日志（AI 自动追加）
+├── .claude/
+│   └── rules/             # 操作规则（自动加载至 ground truth 层）
+│       ├── iron-laws.md       # 5 条铁律
+│       ├── autonomy.md        # 权限矩阵
+│       ├── writing.md         # 写作与标签规范
+│       ├── workflows.md       # 标准操作流程
+│       ├── card-types.md      # 卡片类型与命名
+│       └── structure.md       # 四层架构与目录
 ├── Tasks/                 # 防弹任务笔记
 │   ├── active/            # 进行中
 │   ├── waiting/           # 阻塞中
