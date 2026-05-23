@@ -1,0 +1,132 @@
+---
+name: decide
+description: 结构化决策记录。创建决策日志→查询 vault 历史类似决策作为上下文→FSRS 复查提醒。当用户说"decide"、"decision"、"决策"、"决定"、"选择"、"选哪个"时触发。
+invocation: user
+arguments:
+  - name: title
+    description: 决策简述
+    required: true
+---
+
+# /decide Command
+
+结构化决策记录。不是帮你做决策——而是帮你**追踪决策质量**。好决策和坏结果可以同时存在，没有追踪就分不清是运气还是判断。
+
+## 核心理念
+
+大多数人不记录决策，所以他们从自己的决策历史中学不到任何东西。ThinkFlywheel 把决策当作一类一等公民的知识——它们被记录、被复查、被纳入间隔重复，让你慢慢学会自己的偏见和模式。
+
+## Behavior
+
+### Step 1: 接收决策描述
+
+从用户输入中提取：
+- 决策标题
+- 触发上下文（什么情况需要做这个决策？）
+- 如果有的话，用户已经有哪些候选选项
+
+### Step 2: 查询历史上下文
+
+在做决策之前，查询 vault 积累的相关经验：
+
+1. **历史类似决策**: 搜索 `Decisions/` 中 domain 相同、关键词相似的决策——当时选了哪个选项？结果如何？
+2. **相关知识**: 搜索 `Cards/` 中 domain 匹配的卡片——有什么概念或洞察可以用上？
+3. **相关教训**: 搜索 `Cards/insights/` 中 domain 匹配的教训——之前踩过的坑？
+4. **活跃任务**: 搜索 `Tasks/active/` 中可能受此决策影响的任务
+
+将查询结果作为决策上下文展示给用户。
+
+### Step 3: 辅助构建选项（不替用户做决策）
+
+AI 可以：
+- 列出常见的决策框架（如利弊分析、决策矩阵）供用户选择
+- 指出选项列表中可能的遗漏（"你考虑过 C 选项吗？"）
+- 对每个选项提出探测性问题（"如果选 A，最坏情况是什么？"）
+
+AI 不可以：
+- 替用户做决策
+- 隐藏或弱化某些选项
+- 用倾向性语言引导选择
+
+### Step 4: 创建决策记录
+
+在 `Decisions/DEC-{YYYY}-{NNN}.md` 创建：
+
+```markdown
+---
+type: decision
+domain: {domain}
+status: made
+created: YYYY-MM-DD
+updated: YYYY-MM-DD
+source: null
+related_tasks: [{受影响的任务}]
+related_cards: [{相关的知识卡片}]
+review_checkpoint: {复查日期}
+---
+
+# DEC-{YYYY}-{NNN}: {决策标题}
+
+## Context
+{触发此决策的背景和约束}
+{AI 从 vault 查询到的历史类似决策、相关知识、教训}
+
+## Options Considered
+| 选项 | 优点 | 缺点 | 风险 | 最坏情况 |
+|------|------|------|------|---------|
+| A: {option} | | | | |
+| B: {option} | | | | |
+| C: {option} | | | | |
+
+## Choice
+**选定**: {用户的选择}
+
+## Rationale
+{为什么选这个而不是其他}
+- 关键假设:
+- 放弃的价值（选择 A 意味着不做 B 和 C）:
+
+## Expected Outcome
+{成功是什么样子，什么时候判断这个决策是对的}
+
+## Review Checkpoint
+**复查日期**: {YYYY-MM-DD}
+**复查问题**:
+1. 实际结果符合预期吗？
+2. 关键假设还成立吗？
+3. 如果今天重新选，会选不同的吗？
+```
+
+### Step 5: 注册复查提醒
+
+1. 决策复查日期（默认 30 天后，用户可调整）写入 `review_checkpoint` 字段
+2. 创建一个类型为 decision-review 的卡片注册到 FSRS：
+   ```
+   Q: {决策标题} — 实际结果符合预期吗？
+   A: 预期: {Expected Outcome}
+   ```
+
+### Step 6: 更新索引（AI 自主）
+
+- 更新 `index.md` 的 "Decisions" 节
+- 追加 `log.md`: `## [YYYY-MM-DD] decide | DEC-{YYYY}-{NNN} | {title}`
+- 如果用户接受，将决策记录链接到受影响的任务
+
+---
+
+## 决策复查（用户说"复查决策"/"decision review"时）
+
+1. 读取即将到复查日期的决策记录
+2. 展示原始决策和预期结果
+3. 询问用户: 实际结果如何？关键假设还成立吗？
+4. 更新决策 status: `reviewed` 或 `overturned`
+5. 如果 overturned: 创建 insight 卡片捕获教训
+6. 设置下一次复查日期（如果仍有待观察的假设）
+
+---
+
+## 特殊情况
+
+- **紧急决策** (用户说"没时间走完整流程"): 记录最小版本——选择 + 理由 + 预期，事后补全
+- **不可逆决策**: 标记为 `irreversible`，建议更谨慎的选项评估
+- **决策事后才发现是错的**: 特别有价值——标记为 `overturned`，创建 insight 卡片深挖原因

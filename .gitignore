@@ -1,5 +1,5 @@
 # Claude Code (root) - local only
-.claude/
+/.claude/
 
 # Obsidian personal config
 vault/.obsidian/workspace*.json
