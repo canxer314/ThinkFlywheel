@@ -26,6 +26,7 @@ ThinkFlywheel 是一套运行在 Obsidian + Claude Code 上的个人工作与生
 | 出问题了 | [故障排查](docs/troubleshooting.md) |
 | 想改系统配置 | [定制指南](docs/customization.md) |
 | 理解架构设计 | [完整架构文档](docs/ThinkFlywheel%20-%20Complete%20System%20Architecture.md) |
+| 搭配增强技能 | [增强模式：planning-with-files + agentmemory](docs/integrations.md) |
 
 ---
 
@@ -229,6 +230,47 @@ ThinkFlywheel 采用三级自主权，避免 AI 过度操作：
 | **仅人操作** | AI 不触发 | 设定任务优先级、定义项目目标、做决策 |
 
 **关键原则**：AI 做广度（扫描、提议、格式化），人做深度（判断、决定、创造）。
+
+---
+
+## 增强模式：planning-with-files + agentmemory
+
+ThinkFlywheel 的 10 个技能管理的是**人的工作和生活**。搭配以下两个 Claude Code 生态技能，覆盖范围从"人脑"扩展到"AI Agent 大脑"，形成完整的**人-AI 协作记忆栈**：
+
+| 技能 | 解决的问题 | 记忆类型 |
+|------|-----------|---------|
+| **planning-with-files** | 复杂多步骤任务怎么不跑偏？AI 的执行进度放哪？ | Agent 工作内存 — phase 追踪、发现记录、3-strike 错误恢复 |
+| **agentmemory** | 会话间上下文怎么不丢失？`/clear` 后怎么恢复？上次做了什么？ | Agent 长期记忆 — 会话历史、提交溯源、语义召回 |
+
+### 三系统记忆分工
+
+```
+┌──────────────────────────────────────────────┐
+│ ThinkFlywheel (人脑外挂)                      │
+│ /task /project /note /retro /review          │
+│ "我知道什么、我在做什么、我记住了什么"          │
+│ 存储: Obsidian vault (Markdown + Git)        │
+├──────────────────────────────────────────────┤
+│ planning-with-files (Agent 工作内存)          │
+│ task_plan.md / findings.md / progress.md     │
+│ "这一步做完了、下一步做什么、发现了什么"        │
+│ 存储: .planning/ 目录                        │
+├──────────────────────────────────────────────┤
+│ agentmemory (Agent 长期记忆)                  │
+│ session-history / memory_recall / handoff    │
+│ "上次我们聊过这个、这个决定是怎么来的"          │
+│ 存储: MCP plugin 持久化                       │
+└──────────────────────────────────────────────┘
+```
+
+**关键协同**：
+
+- **任务执行闭环**: ThinkFlywheel `/task` 定义"要做什么" → planning-with-files `task_plan.md` 拆成 phase 追踪"怎么做" → 完成后 `/retro` 把经验提取回 ThinkFlywheel
+- **双重会话恢复**: `/clear` 后 agentmemory `handoff` 恢复对话上下文 + planning-with-files `session-catchup` 恢复执行进度——两套恢复互补
+- **双向知识沉淀**: `/retro` 把**人的经验**提取为 FSRS 卡片；agentmemory `memory_save` 把 **AI 的发现**保存为长期观察 → 下次类似任务自动召回
+- **代码溯源**: agentmemory `commit-context` 追溯每一行代码是哪个会话、哪个 ThinkFlywheel 任务的产物
+
+> 详细配置和用法见 [增强模式指南](docs/integrations.md)。
 
 ---
 
