@@ -1,0 +1,47 @@
+# 卡片类型与命名
+
+## 9 种卡片
+
+| type 标签 | 存储位置 | 说明 | 模板 |
+|-----------|----------|------|------|
+| `type/task` | `Tasks/active/` | 防弹 4 要素任务笔记 | `Templates/task.md` |
+| `type/project` | `Projects/active/` | 多任务目标画布 | `Templates/project.md` |
+| `type/atomic` | `Cards/atomics/` | SR 知识单元 — 最小可复用卡片 | `Templates/atomic.md` |
+| `type/concept` | `Cards/concepts/` | 解释性知识：定义、模型、框架 | `Templates/concept.md` |
+| `type/insight` | `Cards/insights/` | 教训、模式、反模式 | `Templates/insight.md` |
+| `type/reading` | `Cards/reading/` | 已处理来源的结构化摘要 | `Templates/reading.md` |
+| `type/decision` | `Decisions/` | 结构化决策记录 DEC-YYYY-NNN | `Templates/decision.md` |
+| `type/moc` | `MOCs/` | 按领域聚合的内容地图索引 | `Templates/moc.md` |
+| `type/review` | `Reviews/` | 周期/任务复盘 | `Templates/review.md` |
+
+## 写入通道
+
+| 卡片类型 | 写入通道 | 确认机制 |
+|----------|---------|---------|
+| `type/task` | `/task` 直接写入 | 无需双提议（行动容器，非知识） |
+| `type/project` | `/project` 直接写入 | 无需双提议（目标定义，人主导） |
+| `type/atomic` | `/note` 或 `/retro` 双提议 | **必须人工确认** |
+| `type/concept` | `/note` 或 `/ingest` 双提议 | **必须人工确认** |
+| `type/insight` | `/note` 或 `/retro` 双提议 | **必须人工确认** |
+| `type/reading` | `/ingest` 自动生成 | AI 自主（来源处理的自然产物） |
+| `type/decision` | `/decide` 交互式创建 | **必须人工确认** |
+| `type/moc` | AI 自主维护 | AI 自主（纯索引，无新知识） |
+| `type/review` | `/retro` 自动生成 | AI 自主（复盘的结构化记录） |
+
+## 命名规范
+
+| 卡片类型 | 路径格式 |
+|---------|---------|
+| 任务 | `Tasks/active/{Task Name}.md` |
+| 原子 | `Cards/atomics/{Concept Name}.md` |
+| 概念 | `Cards/concepts/{Concept Name}.md` |
+| 洞察 | `Cards/insights/{Pattern Description}.md` |
+| 阅读 | `Cards/reading/{Source Title} — {Author} {YYYY-MM-DD}.md` |
+| 项目 | `Projects/active/{Project Name}.md` |
+| 决策 | `Decisions/DEC-{YYYY}-{NNN}.md`（NNN 为年度内序号，AI 自动分配） |
+| 简报 | `Daily/YYYY-MM-DD.md` |
+| 复盘 | `Reviews/retro/{Task Name} — Retro.md` |
+| 周报 | `Reviews/weekly/YYYY-W{NN}.md` |
+| 月报 | `Reviews/monthly/YYYY-MM.md` |
+
+任务文件名简洁、可操作（如 "Q2 OKR 制定.md"、"修复登录超时 Bug.md"），完成归档后保留原名。
