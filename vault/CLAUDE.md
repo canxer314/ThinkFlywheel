@@ -5,7 +5,7 @@
 > 此目录为 Obsidian vault，由 Claude Code 作为 AI Agent 操作。
 > 所有内容为 Markdown 文件 + YAML frontmatter。
 >
-> 操作规则由 `.claude/rules/` 自动加载至 ground truth 层（铁律、权限、写作标签、工作流、卡片类型、目录结构）。
+> 操作规则由 `.claude/rules/` 自动加载至 ground truth 层（铁律、权限、写作标签、工作流、卡片类型、目录结构、Obsidian CLI 强制规则）。
 > AGENTS.md 为跨工具兼容保留（Codex 原生支持），SCHEMA.md 为按需参考的完整结构文档。
 
 ## 技能路由

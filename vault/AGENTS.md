@@ -137,7 +137,6 @@ AI 应根据用户意图自动识别并执行对应技能:
 - atomic 卡片超过 200 张时: 建议审视哪些该合并或归档
 - Daily 文件保留最近 14 天，超过的 AI 建议清理（人确认）
 
-### 离线/无 Obsidian 时
+### 离线时
 - 所有技能在 Claude Code 对话中可直接执行
-- FSRS 引擎通过 Python CLI 独立运行，不依赖 Obsidian
-- Obsidian 仅作为 markdown 浏览器和编辑器使用
+- FSRS 引擎通过 Python CLI 独立运行

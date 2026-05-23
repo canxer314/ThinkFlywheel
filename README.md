@@ -34,23 +34,34 @@ ThinkFlywheel 是一套运行在 Obsidian + Claude Code 上的个人工作与生
 
 ### 前置条件
 
-1. **Obsidian** — [下载安装](https://obsidian.md), 打开 `vault/` 目录作为 Obsidian vault
+1. **Obsidian ≥1.12.7** — [下载安装](https://obsidian.md), 打开 `vault/` 目录作为 Obsidian vault
    - **验证**: 左侧文件列表应显示 `SCHEMA.md`、`Tasks/`、`Cards/` 等目录
+   - **必须启用 CLI**：Settings → CLI → Enable, 然后终端运行 `obsidian help` 确认可用（所有 vault 文件操作通过 CLI 执行，Obsidian 桌面端需保持运行）
    - 推荐安装 **Dataview** 插件（MOC 和健康报告利用 frontmatter 生成动态表格）
 2. **Claude Code** — [安装 Claude Code](https://docs.anthropic.com/en/docs/claude-code)
    - **验证**: 终端运行 `claude --version` 确认可执行
-3. **Python 3.8+** — FSRS-6 间隔重复引擎需要（纯标准库，无外部依赖）
+3. **obsidian-skills** — 在 Claude Code 中安装，教会 Claude 正确的 CLI 语法和 OFM 格式
+   ```bash
+   # 在 vault/ 目录下启动 Claude Code 后执行：
+   /plugin marketplace add kepano/obsidian-skills
+   /plugin install obsidian@obsidian-skills
+   /reload-plugins
+   ```
+4. **Python 3.8+** — FSRS-6 间隔重复引擎需要（纯标准库，无外部依赖）
    - **验证**: 运行 `python --version`（或 `python3 --version`）
 
 ### 2 分钟试跑
 
 ```bash
-# 1. 进入 vault 目录, 启动 Claude Code
+# 1. 进入 vault 目录, 验证 CLI 可用（需 Obsidian 运行中）
 cd vault
+obsidian help    # 应显示 100+ 可用命令
+
+# 2. 启动 Claude Code
 claude
 
-# 2. Claude Code 启动后自动加载 .claude/rules/ 中的操作规则（铁律、权限、写作规范、
-#    卡片类型、目录结构、工作流）。SCHEMA.md 和 AGENTS.md 作为参考文档按需查询。验证:
+# 3. Claude Code 启动后自动加载 .claude/rules/ 中的操作规则（铁律、权限、写作规范、
+#    卡片类型、目录结构、工作流、CLI 强制规则）。SCHEMA.md 和 AGENTS.md 作为参考文档按需查询。验证:
 "系统里定义了哪些卡片类型？"
 # 预期: Claude 列举 9 种卡片类型
 
@@ -291,7 +302,8 @@ vault/
 │       ├── writing.md         # 写作与标签规范
 │       ├── workflows.md       # 标准操作流程
 │       ├── card-types.md      # 卡片类型与命名
-│       └── structure.md       # 四层架构与目录
+│       ├── structure.md       # 四层架构与目录
+│       └── obsidian-cli.md    # Obsidian CLI 强制规则
 ├── Tasks/                 # 防弹任务笔记
 │   ├── active/            # 进行中
 │   ├── waiting/           # 阻塞中
@@ -361,7 +373,7 @@ ThinkFlywheel 不是另一个知识管理工具或任务管理器。它是**生�
 ## 常见问题
 
 **Q: 必须用 Obsidian 吗？**
-不必须。Obsidian 只作为 Markdown 浏览器和编辑器。所有技能在 Claude Code 对话中都可以直接执行，FSRS 引擎通过 Python CLI 独立运行。
+是的。Obsidian ≥1.12.7 是必需依赖——它不仅是 Markdown 浏览器和编辑器，其 CLI 是 vault 文件操作的强制通道（自动更新 wikilink、校验 frontmatter）。FSRS 引擎通过 Python CLI 独立运行。
 
 **Q: 数据安全吗？**
 所有数据以纯 Markdown 文件存储在本地，用 Git 做版本控制。没有云同步依赖（除非你自己配置）。

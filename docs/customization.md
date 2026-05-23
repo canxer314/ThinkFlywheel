@@ -167,7 +167,7 @@ arguments:
 
 ## 6. Claude Code 行为调优
 
-`vault/.claude/rules/autonomy.md` 分层自主权控制 AI 的胆量。
+`vault/.claude/rules/autonomy.md` 分层自主权控制 AI 的胆量，`obsidian-cli.md` 强制所有 vault 文件操作通过 Obsidian CLI 执行。
 
 ### 让 AI 更自主
 

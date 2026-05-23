@@ -6,14 +6,18 @@
 
 ## 1. 前置条件
 
-### Obsidian
+### Obsidian ≥1.12.7
 
 下载安装 [Obsidian](https://obsidian.md)。启动后点击 "Open folder as vault"，选择本仓库的 `vault/` 目录。
+
+**必须启用 CLI**：Settings → CLI → Enable CLI。启用后在终端运行 `obsidian help` 确认 CLI 已注册（应显示 100+ 命令）。Obsidian 桌面端需保持运行——CLI 通过 IPC 通信。
 
 **推荐插件**（可选但建议安装）：
 - **Dataview** — MOC 和健康报告利用 frontmatter 生成动态表格时会用到
 
-**验证**：Obsidian 左侧文件列表应显示 `SCHEMA.md`、`Tasks/`、`Cards/` 等目录。按 `Ctrl+E` 切换编辑/预览模式，确认文件正常渲染。
+**验证**：
+- Obsidian 左侧文件列表应显示 `SCHEMA.md`、`Tasks/`、`Cards/` 等目录
+- 终端运行 `obsidian help` 应显示可用命令列表
 
 ### Claude Code
 
@@ -24,6 +28,21 @@ claude --version
 ```
 
 **验证**：进入 `vault/` 目录，启动 `claude`，输入 `read SCHEMA.md`。Claude 应该能读取并总结 vault 的结构。
+
+### obsidian-skills
+
+在 Claude Code 中安装 obsidian-skills 插件，教会 Claude 正确的 Obsidian CLI 语法和 OFM 格式：
+
+```bash
+cd vault
+claude
+# 在 Claude Code 会话中执行：
+/plugin marketplace add kepano/obsidian-skills
+/plugin install obsidian@obsidian-skills
+/reload-plugins
+```
+
+安装后在会话中可通过 `/plugin list` 确认 `obsidian:obsidian-cli` 和 `obsidian:obsidian-markdown` 已加载。
 
 ### Python 3.8+
 
@@ -60,9 +79,14 @@ git add -A && git commit -m "init: ThinkFlywheel vault"
 git clone <your-repo-url> thinkflywheel
 cd thinkflywheel
 
-# 2. 用 Obsidian 打开 vault/ 目录作为 vault
+# 2. 用 Obsidian 打开 vault/ 目录作为 vault（需启用 CLI）
 
-# 3. 进入 vault 目录启动 Claude Code
+# 3. 安装 obsidian-skills（在 Claude Code 中执行一次）
+#    /plugin marketplace add kepano/obsidian-skills
+#    /plugin install obsidian@obsidian-skills
+#    /reload-plugins
+
+# 4. 进入 vault 目录启动 Claude Code
 cd vault
 claude
 ```
@@ -219,6 +243,8 @@ Claude 分析"问题与吐槽"（这次可能是空的或很少），然后**双
 逐项打勾，确保系统运转正常：
 
 - [ ] Obsidian 打开 vault 显示完整目录结构
+- [ ] `obsidian help` 在终端可执行，显示 100+ 命令
+- [ ] obsidian-skills 已安装（Claude Code 中 `/plugin list` 确认）
 - [ ] Claude Code 在 vault 目录启动，自动加载 .claude/rules/ 中的操作规则
 - [ ] `/task` 在 `Tasks/active/` 中创建带完整 frontmatter 的笔记
 - [ ] `/briefing` 生成 `Daily/YYYY-MM-DD.md`

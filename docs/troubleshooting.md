@@ -38,7 +38,58 @@ claude
 
 ---
 
-## 2. FSRS 引擎相关问题
+## 2. Obsidian CLI 相关问题
+
+### `obsidian: command not found` 或 CLI 命令无效
+
+**原因**：Obsidian 版本低于 1.12.7，或 CLI 未启用。
+
+**修复**：
+1. 检查 Obsidian 版本：Help → About，确认 ≥1.12.7
+2. 启用 CLI：Settings → CLI → Enable CLI
+3. 重启 Obsidian 后验证：`obsidian help`
+
+### CLI 命令报错 "vault not found" 或 "no vault open"
+
+**原因**：终端不在 vault 目录内，或 Obsidian 未打开对应 vault。
+
+**修复**：
+```bash
+cd vault
+obsidian help  # 确认 CLI 识别到 vault
+# 或用 vault 参数指定：
+obsidian vault="ThinkFlywheel" read file="SCHEMA.md"
+```
+
+### CLI 第一个命令长时间无响应
+
+**原因**：Obsidian 桌面端未运行。CLI 的第一个命令会自动启动 Obsidian，需等待 3-5 秒。
+
+**修复**：先手动启动 Obsidian 并打开 ThinkFlywheel vault，再运行 CLI 命令。
+
+### obsidian-skills 未加载
+
+**原因**：插件未安装或未 reload。
+
+**修复**：在 Claude Code 会话中执行：
+```
+/plugin list                    # 确认 obsidian@obsidian-skills 在列表中
+/plugin install obsidian@obsidian-skills  # 如果未安装
+/reload-plugins                 # 重新加载
+```
+
+### Claude 仍使用 Write/Edit 直接操作 .md 文件
+
+**原因**：obsidian-cli.md 规则未被加载，或 obsidian-skills 未安装。
+
+**修复**：
+1. 确认 `vault/.claude/rules/obsidian-cli.md` 文件存在
+2. 确认 obsidian-skills 已安装并 reload
+3. 重启 Claude Code 会话
+
+---
+
+## 3. FSRS 引擎相关问题
 
 ### /review 显示 0 张到期卡片，但你有原子卡片
 
@@ -92,7 +143,7 @@ python .obsidian/scripts/fsrs_engine.py .obsidian/review_state.json <command>
 
 ---
 
-## 3. 文件相关问题
+## 4. 文件相关问题
 
 ### Claude 说创建了文件，但文件不存在
 
@@ -114,7 +165,7 @@ python .obsidian/scripts/fsrs_engine.py .obsidian/review_state.json <command>
 
 ---
 
-## 4. 索引同步问题
+## 5. 索引同步问题
 
 ### index.md 或 MOC 内容过时
 
@@ -141,7 +192,7 @@ python .obsidian/scripts/fsrs_engine.py .obsidian/review_state.json <command>
 
 ---
 
-## 5. 常见用户错误
+## 6. 常见用户错误
 
 ### 手动创建任务文件而不是用 /task
 
@@ -169,7 +220,7 @@ python .obsidian/scripts/fsrs_engine.py .obsidian/review_state.json <command>
 
 ---
 
-## 6. 恢复流程
+## 7. 恢复流程
 
 ### 重建全部索引
 
@@ -217,7 +268,7 @@ rm index.md log.md
 
 ---
 
-## 7. 还是不行？
+## 8. 还是不行？
 
 1. 确认你用的是最新版 Claude Code（`claude --version`）
 2. 确认 Python 3.8+（`python --version`）
