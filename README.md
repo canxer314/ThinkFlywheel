@@ -15,30 +15,87 @@ ThinkFlywheel 是一套运行在 Obsidian + Claude Code 上的个人工作与生
 
 ---
 
+## 文档导航
+
+| 你想做什么 | 去看 |
+|-----------|------|
+| 从头搭起来 | [快速开始](#快速开始) → [上手指南](docs/getting-started.md) |
+| 5 分钟看完整流程 | [5 分钟走一遍](#5-分钟走一遍) |
+| 某个技能怎么用 | [技能参考](docs/skills.md) |
+| 看真实使用案例 | [工作流示例](docs/workflow-examples.md) |
+| 出问题了 | [故障排查](docs/troubleshooting.md) |
+| 想改系统配置 | [定制指南](docs/customization.md) |
+| 理解架构设计 | [完整架构文档](docs/ThinkFlywheel%20-%20Complete%20System%20Architecture.md) |
+
+---
+
 ## 快速开始
 
 ### 前置条件
 
-1. **Obsidian** — 安装并打开 `vault/` 目录作为 Obsidian vault
-2. **Claude Code** — 在 vault 目录下运行 `claude`
+1. **Obsidian** — [下载安装](https://obsidian.md), 打开 `vault/` 目录作为 Obsidian vault
+   - **验证**: 左侧文件列表应显示 `SCHEMA.md`、`Tasks/`、`Cards/` 等目录
+   - 推荐安装 **Dataview** 插件（MOC 和健康报告利用 frontmatter 生成动态表格）
+2. **Claude Code** — [安装 Claude Code](https://docs.anthropic.com/en/docs/claude-code)
+   - **验证**: 终端运行 `claude --version` 确认可执行
 3. **Python 3.8+** — FSRS-6 间隔重复引擎需要（纯标准库，无外部依赖）
+   - **验证**: 运行 `python --version`（或 `python3 --version`）
 
 ### 2 分钟试跑
 
 ```bash
-# 1. 进入 vault 目录
+# 1. 进入 vault 目录, 启动 Claude Code
 cd vault
-
-# 2. 启动 Claude Code
 claude
 
-# 3. 在对话中试试这些命令：
-/task 整理本周工作优先级     # 创建第一个防弹任务笔记
-/briefing                    # 生成今日上下文简报
-/health quick                # 快速系统健康检查
+# 2. Claude Code 启动后自动读取 SCHEMA.md + AGENTS.md。验证:
+"SCHEMA.md 里定义了哪些卡片类型？"
+# 预期: Claude 列举 9 种卡片类型
+
+# 3. 创建第一个防弹任务笔记
+/task 整理本周工作优先级
+# 预期: 在 Tasks/active/ 下创建带 4 要素的笔记, AI 自动从 vault 搜索相关知识填入材料堆
+
+# 4. 生成今日上下文简报
+/briefing
+# 预期: 生成 Daily/YYYY-MM-DD.md, 包含活跃任务 + 到期复习 + 项目健康（初期内容较少是正常的）
+
+# 5. 快速系统体检
+/health quick
+# 预期: 多维度健康报告, 综合评分（初期有很多"警告"是正常的）
 ```
 
-Claude Code 会在每次对话启动时自动读取 `SCHEMA.md` 和 `AGENTS.md`，理解 vault 的结构和行为规则。
+> 详细设置步骤和故障排除见 [上手指南](docs/getting-started.md)。
+
+---
+
+## 5 分钟走一遍
+
+用一个具体任务"整理本周工作优先级"展示核心飞轮：
+
+```
+Step 1: 创建任务
+> /task 整理本周工作优先级
+→ Tasks/active/ 下创建带 4 要素（目标/材料/行动/吐槽）的笔记
+
+Step 2: 执行完成后告诉 Claude
+> 本周工作优先级整理完了, 下周重点是 Q2 OKR 复盘
+→ 任务状态更新为 done
+
+Step 3: 复盘, 提取知识（关键桥接！）
+> /retro 整理本周工作优先级
+→ AI 分析"问题与吐槽", 双提议 insight/atomic 卡片, 你选择接受
+
+Step 4: 复习知识卡片
+> /review
+→ 刚接受的 atomic 卡片进入复习队列, 自评 1-4 分, FSRS-6 自动调度
+
+Step 5: 看飞轮效果
+> /briefing
+→ 活跃任务 + 到期复习（交叉引用关联任务）+ 项目健康, 一页全貌
+```
+
+> 这个循环重复得越多, 系统价值越大。更多场景见 [工作流示例](docs/workflow-examples.md)。
 
 ---
 
@@ -93,35 +150,51 @@ Claude Code 会在每次对话启动时自动读取 `SCHEMA.md` 和 `AGENTS.md`�
 
 ## 10 个技能
 
+### 每日节奏：什么时候用哪个
+
+```
+早晨刚坐下   → /briefing   每天唯一必跑
+开始做一件事 → /task       新任务、新想法、别人交代的事
+读了一篇文章 → /ingest     处理成阅读摘要 + 提取知识点
+对话中学到了 → /note       双提议提取, 存为卡片
+做完了一件事 → /retro      复盘 + 提取知识（关键桥接）
+晚上空闲     → /review     5-10 分钟复习到期卡片
+需要找东西   → /query      多策略搜索 vault
+做重要选择   → /decide     结构化记录 + 未来复查
+周末         → /health     全面体检
+```
+
+> 详细用法见 [技能参考](docs/skills.md)。
+
 ### 执行组
 
-| 技能 | 触发词 | 功能 |
-|------|--------|------|
-| `/task` | "new task" "创建任务" "要做X" | 创建防弹 4 要素任务笔记 |
-| `/project` | "project" "goal" "目标" "新项目" | 管理多任务目标（里程碑 + 进度脉搏 + 风险日志） |
-| `/briefing` | "briefing" "今天" "晨报" "早上好" | 生成每日上下文简报 |
+| 技能 | 触发词 | 什么时候用 | 功能 |
+|------|--------|-----------|------|
+| `/task` | "new task" "创建任务" "要做X" | 开始任何新工作, 想到要做的事 | 创建防弹 4 要素任务笔记 |
+| `/project` | "project" "goal" "目标" "新项目" | 多任务协同, 想追踪整体进度 | 里程碑 + 进度脉搏 + 风险日志 |
+| `/briefing` | "briefing" "今天" "晨报" "早上好" | 每天第一次打开 Claude Code | 生成每日上下文简报 |
 
 ### 知识组
 
-| 技能 | 触发词 | 功能 |
-|------|--------|------|
-| `/ingest` | "ingest" "read this" "处理" "读一下" | 处理原始材料到 wiki，生成阅读摘要 |
-| `/note` | "note" "做笔记" "存笔记" "拆卡片" | 双提议机制：从对话中提取 wikilinks + 原子卡片 |
-| `/query` | "query" "find" "搜索" "找" | 多策略搜索 vault 知识 |
+| 技能 | 触发词 | 什么时候用 | 功能 |
+|------|--------|-----------|------|
+| `/ingest` | "ingest" "read this" "处理" "读一下" | 读了好文章想留下笔记 | 处理原始材料 → 摘要 → 触发知识提取 |
+| `/note` | "note" "做笔记" "存笔记" "拆卡片" | 对话中学到东西, 值得保留 | 双提议机制：wikilinks + 原子卡片 |
+| `/query` | "query" "find" "搜索" "找" | 想查 vault 里记录过的知识 | 多策略搜索, 综合回答带 wikilink 引用 |
 
 ### 记忆组
 
-| 技能 | 触发词 | 功能 |
-|------|--------|------|
-| `/review` | "review" "复习" "今天复习什么" | FSRS-6 间隔重复，卡片评级 (Again/Hard/Good/Easy) |
-| `/retro` | "retro" "done" "完成" "复盘" | 任务复盘 + 自动知识提取（核心桥接技能） |
+| 技能 | 触发词 | 什么时候用 | 功能 |
+|------|--------|-----------|------|
+| `/review` | "review" "复习" "今天复习什么" | 每天一次, vault 里有卡片后 | FSRS-6 间隔重复, 评级调度 |
+| `/retro` | "retro" "done" "完成" "复盘" | 任务完成或放弃时 | 复盘 + 自动知识提取（核心桥接） |
 
 ### 治理组
 
-| 技能 | 触发词 | 功能 |
-|------|--------|------|
-| `/health` | "health" "check" "体检" "lint" | 跨系统健康检查：断链、僵死任务、知识-行动断层、领域平衡 |
-| `/decide` | "decide" "decision" "决策" "决定" | 结构化决策记录，查询历史类似决策，FSRS 复查提醒 |
+| 技能 | 触发词 | 什么时候用 | 功能 |
+|------|--------|-----------|------|
+| `/health` | "health" "check" "体检" "lint" | quick 随时, full 每周 | 跨系统健康检查, 综合评分 |
+| `/decide` | "decide" "decision" "决策" "决定" | 做重要选择, 在两个选项中纠结 | 结构化决策 + FSRS 复查提醒 |
 
 ---
 
@@ -221,6 +294,8 @@ ThinkFlywheel 不是另一个知识管理工具或任务管理器。它是**生�
 
 ## 实践路线图
 
+> 每阶段的详细 checklists 和成功标准见 [上手指南](docs/getting-started.md#5-phase-by-phase-采用指南)。
+
 | 阶段 | 时间 | 构建内容 |
 |------|------|---------|
 | **Phase 0** | 已完成 | vault 结构、SCHEMA.md、AGENTS.md、模板、FSRS 引擎 |
@@ -242,6 +317,12 @@ ThinkFlywheel 不是另一个知识管理工具或任务管理器。它是**生�
 
 **Q: 我能只用其中几个技能吗？**
 可以。四组技能（执行、知识、记忆、治理）相互独立，你可以按自己的节奏逐步采用。推荐从 `/task` 和 `/briefing` 开始。
+
+**Q: 有更详细的使用指南吗？**
+每个技能怎么用、什么时候用、常见坑 → [技能参考](docs/skills.md)。真实场景的端到端示例 → [工作流示例](docs/workflow-examples.md)。
+
+**Q: 出错了怎么办？**
+先跑 `/health quick`——它能自动发现大多数问题。还不行的话, 按症状查 [故障排查](docs/troubleshooting.md)。
 
 **Q: 怎么知道系统在健康运转？**
 运行 `/health quick` 会扫描链接健康、任务僵死、复习积压、领域平衡等 6 个维度，给出综合评分和修复建议。
