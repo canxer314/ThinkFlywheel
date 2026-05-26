@@ -1,6 +1,6 @@
 ---
 type: reading
-domain: learning
+domain: {life-area}
 status: processed
 created: {{date}}
 updated: {{date}}
@@ -8,6 +8,10 @@ mastery: null
 source: null
 related_tasks: []
 related_cards: []
+tags:
+  - type/reading
+  - domain/{life-area}
+  - status/processed
 ---
 
 # {{title}} — 阅读摘要

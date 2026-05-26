@@ -1,6 +1,6 @@
 ---
 type: concept
-domain: learning
+domain: {life-area}
 status: draft
 created: {{date}}
 updated: {{date}}
@@ -8,6 +8,10 @@ mastery: null
 source: null
 related_tasks: []
 related_cards: []
+tags:
+  - type/concept
+  - domain/{life-area}
+  - status/draft
 ---
 
 # {{title}}

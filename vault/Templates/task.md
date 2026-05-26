@@ -1,6 +1,6 @@
 ---
 type: task
-domain: work
+domain: {life-area}
 status: todo
 priority: medium
 created: {{date}}
@@ -10,6 +10,10 @@ project: null
 flow: null
 related_tasks: []
 related_cards: []
+tags:
+  - type/task
+  - domain/{life-area}
+  - status/todo
 ---
 
 # {{title}}

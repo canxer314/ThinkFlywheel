@@ -1,6 +1,6 @@
 ---
 type: atomic
-domain: learning
+domain: {life-area}
 status: new
 created: {{date}}
 updated: {{date}}
@@ -8,6 +8,11 @@ mastery: 0-new
 source: null
 related_tasks: []
 related_cards: []
+tags:
+  - type/atomic
+  - domain/{life-area}
+  - status/new
+  - mastery/0-new
 ---
 
 # {{title}}

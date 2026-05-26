@@ -1,6 +1,6 @@
 ---
 type: flow
-domain: work
+domain: {life-area}
 status: active
 created: {{date}}
 updated: {{date}}
@@ -8,6 +8,10 @@ trigger: null
 version: 1
 related_tasks: []
 related_cards: []
+tags:
+  - type/flow
+  - domain/{life-area}
+  - status/active
 ---
 
 # {{title}}

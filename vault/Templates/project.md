@@ -1,6 +1,6 @@
 ---
 type: project
-domain: work
+domain: {life-area}
 status: active
 created: {{date}}
 updated: {{date}}
@@ -8,6 +8,10 @@ due: null
 related_tasks: []
 related_cards: []
 related_flows: []
+tags:
+  - type/project
+  - domain/{life-area}
+  - status/active
 ---
 
 # {{title}}

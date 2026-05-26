@@ -1,10 +1,14 @@
 ---
 type: moc
-domain: learning
+domain: {life-area}
 status: active
 created: {{date}}
 updated: {{date}}
 mastery: null
+tags:
+  - type/moc
+  - domain/{life-area}
+  - status/active
 ---
 
 # {{title}}

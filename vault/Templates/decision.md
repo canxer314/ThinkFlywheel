@@ -1,6 +1,6 @@
 ---
 type: decision
-domain: work
+domain: {life-area}
 status: pending
 created: {{date}}
 updated: {{date}}
@@ -9,6 +9,10 @@ source: null
 related_tasks: []
 related_cards: []
 review_checkpoint: null
+tags:
+  - type/decision
+  - domain/{life-area}
+  - status/pending
 ---
 
 # DEC-{{year}}-{{nnn}}: {{title}}

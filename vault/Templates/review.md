@@ -1,6 +1,6 @@
 ---
 type: review
-domain: work
+domain: {life-area}
 status: draft
 created: {{date}}
 updated: {{date}}
@@ -8,6 +8,10 @@ mastery: null
 source: null
 related_tasks: []
 related_cards: []
+tags:
+  - type/review
+  - domain/{life-area}
+  - status/draft
 ---
 
 # {{title}} — 复盘
