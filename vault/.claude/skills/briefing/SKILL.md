@@ -43,6 +43,21 @@ python .obsidian/scripts/fsrs_engine.py .obsidian/review_state.json due --limit 
 - 读取卡片内容，提取主题关键词
 - 按 `domain` 分组
 
+### Step 2b: 检测今日触发的永久型流程 🆕
+
+扫描 `Flows/` 下所有 `type: flow` 且 `status: active` 的笔记,检查 `trigger` 字段:
+
+- `weekly-fri` → 今天是否周五? → 提示"今天该执行 [[周报撰写流程]] 了,是否创建本周任务?"
+- `weekly-mon` → 今天是否周一?
+- `monthly-1` → 今天是否本月1日?
+- `on-demand` → 不主动提示
+- `event:xxx` → 预留
+
+对每个今日触发的流程:
+- 列出流程名称和最近一次执行记录
+- 询问用户是否激活(自动创建 /task,flow 字段预填,步骤继承自流程)
+- 用户同意 → 调用 `/task` 创建逻辑
+
 ### Step 3: 交叉引用（核心融合）
 
 对每张到期复习卡片，搜索 vault 中是否存在关联：
@@ -99,6 +114,12 @@ python .obsidian/scripts/fsrs_engine.py .obsidian/review_state.json due --limit 
 | [[Project X]] | 🟢 on-track | 3/5 | 2 |
 | [[Project Y]] | 🔴 stalled | 0 | 0 |
 
+## 🔄 今日流程触发
+{如果有今日触发的永久型流程}
+| 流程 | 触发条件 | 上次执行 | 操作 |
+|------|---------|---------|------|
+| [[周报撰写流程]] | 每周五 | 7天前 | 是否创建本周任务? |
+
 ## ⚠️ 历史预警
 {从历史类似任务的"问题与吐槽"中发现的可能模式}
 
@@ -107,6 +128,7 @@ python .obsidian/scripts/fsrs_engine.py .obsidian/review_state.json due --limit 
 - 到期复习: {count}
 - 阻塞任务: {count}
 - 即将到期: {count}
+- 今日触发流程: {count}
 ```
 
 ### Step 7: 更新索引

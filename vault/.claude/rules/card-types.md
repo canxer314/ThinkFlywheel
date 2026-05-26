@@ -1,11 +1,12 @@
 # 卡片类型与命名
 
-## 9 种卡片
+## 10 种卡片
 
 | type 标签 | 存储位置 | 说明 | 模板 |
 |-----------|----------|------|------|
-| `type/task` | `Tasks/active/` | 防弹 4 要素任务笔记 | `Templates/task.md` |
-| `type/project` | `Projects/active/` | 多任务目标画布 | `Templates/project.md` |
+| `type/task` | `Tasks/active/` | 暂时性任务笔记 — 防弹 4 要素 | `Templates/task.md` |
+| `type/project` | `Projects/active/` | 专案目标笔记 — 鸟瞰地图 | `Templates/project.md` |
+| `type/flow` | `Flows/{domain}/` | 永久型任务笔记 — SOP/流程/检查清单，永不关闭 | `Templates/flow.md` |
 | `type/atomic` | `Cards/atomics/` | SR 知识单元 — 最小可复用卡片 | `Templates/atomic.md` |
 | `type/concept` | `Cards/concepts/` | 解释性知识：定义、模型、框架 | `Templates/concept.md` |
 | `type/insight` | `Cards/insights/` | 教训、模式、反模式 | `Templates/insight.md` |
@@ -20,6 +21,7 @@
 |----------|---------|---------|
 | `type/task` | `/task` 直接写入 | 无需双提议（行动容器，非知识） |
 | `type/project` | `/project` 直接写入 | 无需双提议（目标定义，人主导） |
+| `type/flow` | `/flow` 直接写入 + `/retro` 触发迭代 | 无需双提议（流程模板，非知识） |
 | `type/atomic` | `/note` 或 `/retro` 双提议 | **必须人工确认** |
 | `type/concept` | `/note` 或 `/ingest` 双提议 | **必须人工确认** |
 | `type/insight` | `/note` 或 `/retro` 双提议 | **必须人工确认** |
@@ -32,7 +34,8 @@
 
 | 卡片类型 | 路径格式 |
 |---------|---------|
-| 任务 | `Tasks/active/{Task Name}.md` |
+| 任务 | `Tasks/active/{A-F-O-T Title}.md` |
+| 流程 | `Flows/{domain}/{Flow Name}.md` — 名词性 + "流程"/"SOP"/"清单" |
 | 原子 | `Cards/atomics/{Concept Name}.md` |
 | 概念 | `Cards/concepts/{Concept Name}.md` |
 | 洞察 | `Cards/insights/{Pattern Description}.md` |

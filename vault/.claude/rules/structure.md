@@ -8,7 +8,7 @@
 |----|------|--------|------|
 | L1 Memory | `Cards/atomics/` + `.obsidian/scripts/fsrs_engine.py` | AI 执行，人验证 | FSRS-6 间隔重复，确保知识进入大脑 |
 | L2 Knowledge | `Cards/` + `Sources/` | AI 编译维护，人验证 | LLM Wiki 编译层：概念、洞察、阅读摘要 |
-| L3 Task | `Tasks/` + `Projects/` + `Decisions/` | 人主导，AI 辅助 | 防弹笔记法任务管理 + 简化 PMO |
+| L3 Task | `Tasks/` + `Projects/` + `Flows/` + `Decisions/` | 人主导，AI 辅助 | 防弹笔记法三层任务(暂时性+专案+永久型) + 决策 |
 | L4 Governance | `MOCs/` + `Reviews/` + `Daily/` | AI 自主扫描 + 人决策 | 跨系统健康检查 + 索引 + 简报 |
 
 ## 目录结构
@@ -21,10 +21,15 @@ Vault/
 ├── index.md                  # 内容索引（AI 维护）
 ├── log.md                    # 时间线日志（AI 追加）
 │
-├── Tasks/                    # 防弹任务笔记 — 系统枢纽
+├── Tasks/                    # 暂时性任务笔记 — 系统枢纽
 │   ├── active/               # 进行中：每任务一个笔记
 │   ├── waiting/              # 阻塞 / 等待外部输入
 │   └── archived/             # 已完成（知识提取源）
+│
+├── Flows/                    # 🆕 永久型任务笔记(SOP/流程库)
+│   ├── work/                 # 工作类流程
+│   ├── life/                 # 生活类流程
+│   └── learning/             # 学习类流程
 │
 ├── Cards/                    # 知识卡片 — LLM Wiki
 │   ├── atomics/              # type/atomic：最小可复用单元 → 喂 SR

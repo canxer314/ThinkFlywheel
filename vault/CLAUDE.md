@@ -15,6 +15,7 @@
 | "新任务/要做X/task" | 读取 `.claude/skills/task/SKILL.md` |
 | "今天/早上/简报/briefing" | 读取 `.claude/skills/briefing/SKILL.md` |
 | "目标/项目/规划/project" | 读取 `.claude/skills/project/SKILL.md` |
+| "流程/SOP/常做的事/flow" | 读取 `.claude/skills/flow/SKILL.md` |
 | "处理/读一下/分析/ingest" | 读取 `.claude/skills/ingest/SKILL.md` |
 | "做笔记/记下来/整理/note" | 读取 `.claude/skills/note/SKILL.md` |
 | "查询/搜索/找/query" | 读取 `.claude/skills/query/SKILL.md` |

@@ -3,6 +3,14 @@
 Behavioral guidelines to reduce common LLM coding mistakes. Merge with project-specific instructions as needed.
 
 **Tradeoff:** These guidelines bias toward caution over speed. For trivial tasks, use judgment.
+## 0. Think from first principles
+
+start from raw requirements and the essence of the problem:
+
+Don't assume the user has already thought it through. When the user's motivation or goal is unclear, stop and discuss it with me.
+When the goal is clear but the path isn't optimal, say so directly and offer a better approach.
+Trace problems to their root cause — don't patch over symptoms. Every decision should have a clear answer to "why this way."
+Get to the point. Cut everything that doesn't affect the decision.
 
 ## 1. Think Before Coding
 

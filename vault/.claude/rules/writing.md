@@ -4,7 +4,9 @@
 - **atomic**: 单一概念，≤300 字，自包含（脱离上下文也能理解）
 - **concept**: 定义 + 要点 + 示例 + 相关卡片链接
 - **insight**: 触发情境 + 教训/模式 + 反模式（如适用）+ 适用范围
-- **task**: 必须包含 4 要素 — 最终目标、原始材料堆、下一步行动、问题与吐槽
+- **task**: 必须包含 4 要素 — 最终目标、原始材料堆、下一步行动、问题与吐槽。A-F-O-T 命名: 动词+对谁+成果+时地
+- **project**: 鸟瞰地图 — 专案完成定义、里程碑地图、任务清单可视化、进度评估、专案经验区
+- **flow**: 永久型任务笔记 — 适用场景、流程目标、标准步骤、易错点与陷阱、迭代日志
 
 ## 四维标签
 
@@ -35,6 +37,7 @@ mastery/{level}         # 掌握程度（atomic 卡片必填，其他可选）
 |----------|------------|
 | task | `todo` `doing` `waiting` `done` `archived` |
 | project | `active` `paused` `completed` `abandoned` |
+| flow | `active` `deprecated` |
 | atomic | `new` `learning` `reviewing` `mastered` |
 | concept/insight | `draft` `stable` `superseded` |
 | decision | `pending` `made` `reviewed` `overturned` |
@@ -78,8 +81,15 @@ related_cards: [card-1, card-2] or []
 | `updated` | 是 | 最后更新日期（AI 自动维护） |
 | `mastery` | atomic 必填 | 掌握程度 |
 | `source` | reading/atomic 必填 | 溯源链接：reading 回链 Sources，atomic 回链 reading 或 task |
+| `priority` | task 可选 | 优先级: high / medium / low |
+| `due` | task/project 可选 | 截止日期 |
+| `project` | task 可选 | 关联专案 [[wikilink]] |
+| `flow` | task 可选 | 使用的永久型流程 [[wikilink]] |
+| `trigger` | flow 可选 | 触发条件: weekly-fri / monthly-1 / on-demand / event:xxx |
+| `version` | flow 可选 | 流程版本号,迭代时递增 |
 | `related_tasks` | 可选 | 关联任务列表 |
 | `related_cards` | 可选 | 关联卡片列表 |
+| `related_flows` | project 可选 | 关联的永久型流程列表 |
 
 ## 溯源链
 

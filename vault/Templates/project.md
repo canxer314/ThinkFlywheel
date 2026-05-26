@@ -4,36 +4,52 @@ domain: work
 status: active
 created: {{date}}
 updated: {{date}}
-mastery: null
-source: null
+due: null
 related_tasks: []
 related_cards: []
+related_flows: []
 ---
 
 # {{title}}
 
-## Goal Statement
-<!-- 一句话：成功的定义 -->
+🎯 专案完成定义
+<!-- 整个专案干完了,应该是什么样子? -->
+<!-- 注意: 与子任务的完成定义不同,这是鸟瞰层的成功标准 -->
 
 
-## Motivation
-<!-- 为什么这件事现在重要 -->
+💡 立项动机
+<!-- 为什么现在做这件事?完成后能解决什么问题? -->
 
 
-## Key Milestones
-- [ ] M1: ... (target: YYYY-MM-DD)
-- [ ] M2: ... (target: YYYY-MM-DD)
-- [ ] M3: ... (target: YYYY-MM-DD)
+🗺️ 里程碑地图
+- [ ] M1: ... (目标: YYYY-MM-DD)
+- [ ] M2: ... (目标: YYYY-MM-DD)
+- [ ] M3: ... (目标: YYYY-MM-DD)
 
-## Linked Tasks
-<!-- AI 自动从 Tasks/ 中收集链接到此项目的任务 -->
+📋 任务清单(鸟瞰)
+<!-- AI 自动汇总所有 frontmatter 中 project 字段指向此专案的任务 -->
+<!-- 显示形式: 状态图标 + 任务链接 + 完成定义摘要 -->
+<!-- ✅ [[任务A]] — 已交付Q2报告 -->
+<!-- 🔲 [[任务B]] — 待启动 -->
+<!-- ⏸️ [[任务C]] — 等待法务回复 -->
+
+📎 关联流程
+<!-- 此专案会反复用到的永久型任务笔记 -->
 
 
-## Risk Log
-<!-- 从关联任务的"问题与吐槽"中汇总的风险 -->
+📊 进度评估
+<!-- AI 每周更新,或子任务完成时触发重新评估 -->
+Last updated: {{date}}
+完成度: 0% (0/0 个任务)
+态势: 🟢 on-track
+评估理由: 
 
 
-## Progress Pulse
-<!-- AI 每周更新: on-track / at-risk / stalled -->
-**Last updated**: {{date}}
-**Status**: on-track
+🚧 专案级问题与决策
+<!-- 从子任务"问题与吐槽"中升级到专案层的关键问题 -->
+<!-- 以及为此做出的专案级决策 -->
+
+
+💡 专案经验区
+<!-- 专案推进中沉淀的、不属于单个任务的整体洞察 -->
+<!-- /retro 在专案级复盘时填写 -->

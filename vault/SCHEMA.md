@@ -1,6 +1,6 @@
 ---
 title: ThinkFlywheel Schema
-version: 1.0
+version: 1.1
 tags:
   - type/schema
 updated: 2026-05-22
@@ -22,7 +22,7 @@ updated: 2026-05-22
 |----|------|--------|------|
 | L1 Memory | `Cards/atomics/` + `.obsidian/scripts/fsrs_engine.py` | AI 执行，人验证 | FSRS-6 间隔重复，确保知识进入大脑 |
 | L2 Knowledge | `Cards/` + `Sources/` | AI 编译维护，人验证 | LLM Wiki 编译层：概念、洞察、阅读摘要 |
-| L3 Task | `Tasks/` + `Projects/` + `Decisions/` | 人主导，AI 辅助 | 防弹笔记法任务管理 + 简化 PMO |
+| L3 Task | `Tasks/` + `Projects/` + `Flows/` + `Decisions/` | 人主导，AI 辅助 | 防弹笔记法三层任务管理(暂时性+专案+永久型) + 决策 |
 | L4 Governance | `MOCs/` + `Reviews/` + `Daily/` | AI 自主扫描 + 人决策 | 跨系统健康检查 + 索引 + 简报 |
 
 **关键哲学**: 这不是上下堆叠，是飞轮。完成任务→产生知识→进入记忆→新任务浮现→更好执行。复利循环。
@@ -39,10 +39,15 @@ Vault/
 ├── index.md                  # 内容索引（AI 维护）
 ├── log.md                    # 时间线日志（AI 追加）
 │
-├── Tasks/                    # 防弹任务笔记 — 系统枢纽
+├── Tasks/                    # 暂时性任务笔记 — 系统枢纽
 │   ├── active/               # 进行中：每任务一个笔记
 │   ├── waiting/              # 阻塞 / 等待外部输入
 │   └── archived/             # 已完成（知识提取源）
+│
+├── Flows/                    # 🆕 永久型任务笔记(SOP/流程库)
+│   ├── work/                 # 工作类流程
+│   ├── life/                 # 生活类流程
+│   └── learning/             # 学习类流程
 │
 ├── Cards/                    # 知识卡片 — LLM Wiki
 │   ├── atomics/              # type/atomic：最小可复用单元 → 喂 SR
@@ -71,12 +76,13 @@ Vault/
 
 ---
 
-## 3. 卡片类型定义（9 种）
+## 3. 卡片类型定义（10 种）
 
 | type 标签 | 存储位置 | 说明 | 模板 |
 |-----------|----------|------|------|
-| `type/task` | `Tasks/active/` | 防弹 4 要素任务笔记 | `Templates/task.md` |
-| `type/project` | `Projects/active/` | 多任务目标画布 | `Templates/project.md` |
+| `type/task` | `Tasks/active/` | 防弹 4 要素任务笔记（暂时性） | `Templates/task.md` |
+| `type/project` | `Projects/active/` | 多任务目标画布（专案鸟瞰地图） | `Templates/project.md` |
+| `type/flow` | `Flows/{domain}/` | 永久型任务笔记(SOP/流程/检查清单) — 反复执行、永不关闭 | `Templates/flow.md` |
 | `type/atomic` | `Cards/atomics/` | SR 知识单元 — 最小可复用卡片 | `Templates/atomic.md` |
 | `type/concept` | `Cards/concepts/` | 解释性知识：定义、模型、框架 | `Templates/concept.md` |
 | `type/insight` | `Cards/insights/` | 教训、模式、反模式 | `Templates/insight.md` |
@@ -91,6 +97,7 @@ Vault/
 |----------|---------|---------|
 | `type/task` | `/task` 直接写入 | 无需双提议（行动容器，非知识） |
 | `type/project` | `/project` 直接写入 | 无需双提议（目标定义，人主导） |
+| `type/flow` | `/flow` 直接写入 + `/retro` 触发迭代 | 无需双提议（流程模板，非知识） |
 | `type/atomic` | `/note` 或 `/retro` 双提议 | **必须人工确认** |
 | `type/concept` | `/note` 或 `/ingest` 双提议 | **必须人工确认** |
 | `type/insight` | `/note` 或 `/retro` 双提议 | **必须人工确认** |
@@ -130,6 +137,7 @@ mastery/{level}         # 掌握程度（atomic 卡片必填，其他可选）
 |----------|------------|
 | task | `todo` `doing` `waiting` `done` `archived` |
 | project | `active` `paused` `completed` `abandoned` |
+| flow | `active` `deprecated` |
 | atomic | `new` `learning` `reviewing` `mastered` |
 | concept/insight | `draft` `stable` `superseded` |
 | decision | `pending` `made` `reviewed` `overturned` |
@@ -190,6 +198,9 @@ Sources/inbox → /ingest → Cards/reading/ (type/reading)
 Tasks/active/ → /retro → Cards/insights/ (type/insight)
                               ↓ /note 提取
                          Cards/atomics/ (type/atomic)
+
+Tasks/active/ → /retro → 回写 Flows/{domain}/ (type/flow) — 流程级经验
+                              → 更新 Projects/active/ (type/project) — 专案级洞察
 ```
 
 ---
@@ -202,6 +213,8 @@ Tasks/active/ → /retro → Cards/insights/ (type/insight)
 | 更新 task 状态/下一步行动 | ✓ | | |
 | 创建 project 笔记 | | | ✓ (/project 命令触发) |
 | 更新 project 进度脉搏 | ✓ | | |
+| 创建 flow 笔记 | | | ✓ (/flow 命令触发) |
+| 更新 flow 内容/迭代日志 | ✓ | | |
 | 创建/更新 atomic 卡片 | | ✓ | |
 | 创建/更新 concept 卡片 | | ✓ | |
 | 创建/更新 insight 卡片 | | ✓ | |
@@ -227,10 +240,18 @@ Tasks/active/ → /retro → Cards/insights/ (type/insight)
 
 ### 任务笔记
 ```
-Tasks/active/{Task Name}.md
+Tasks/active/{A-F-O-T Title}.md
 ```
-- 简洁、可操作：如 "Q2 OKR 制定.md"、"修复登录超时 Bug.md"
+- A-F-O-T 命名公式: 动词 + 对谁 + 成果 + 时地
+- 例: "撰写给A客户的Q2销售分析报告(含3图表+1结论页),周三午前邮件发出"
 - 完成归档后保留原名
+
+### 永久型任务笔记(Flow)
+```
+Flows/{domain}/{Flow Name}.md
+```
+- 名词性命名 + "流程"/"SOP"/"清单"/"手册"
+- 例: "周报撰写流程.md"、"客户谈判 SOP.md"、"新成员入职检查清单.md"
 
 ### 知识卡片
 ```
@@ -296,13 +317,14 @@ MOC 由 AI 自主维护，内容为 `[[wikilink]]` 列表 + 一句话摘要，�
 
 | 组 | 技能 | 功能 |
 |----|------|------|
-| 执行 | `/task` | 创建和管理防弹任务笔记 |
-| 执行 | `/project` | 管理多任务目标（简化 PMO） |
+| 执行 | `/task` | 创建和管理暂时性任务笔记 |
+| 执行 | `/project` | 管理专案目标笔记（鸟瞰地图） |
+| 执行 | `/flow` | 创建和管理永久型任务笔记（SOP/流程库） |
 | 执行 | `/briefing` | 生成每日上下文简报 |
 | 知识 | `/ingest` | 处理原始材料到 wiki |
 | 知识 | `/note` | 双提议提取原子卡片和 wikilinks |
 | 知识 | `/query` | 搜索 vault 知识 |
 | 记忆 | `/review` | FSRS-6 间隔重复 |
-| 记忆 | `/retro` | 任务复盘 + 自动知识提取 |
+| 记忆 | `/retro` | 任务复盘 + 三向经验回流 |
 | 治理 | `/health` | 跨系统健康检查 |
 | 治理 | `/decide` | 结构化决策记录 |

@@ -6,6 +6,8 @@
 | 更新 task 状态/下一步行动 | ✓ | | |
 | 创建 project 笔记 | | | ✓ (/project 命令触发) |
 | 更新 project 进度脉搏 | ✓ | | |
+| 创建 flow 笔记 | | | ✓ (/flow 命令触发) |
+| 更新 flow 内容/迭代日志 | ✓ | | |
 | 创建/更新 atomic 卡片 | | ✓ | |
 | 创建/更新 concept 卡片 | | ✓ | |
 | 创建/更新 insight 卡片 | | ✓ | |
