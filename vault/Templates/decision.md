@@ -18,6 +18,7 @@ review_checkpoint: null
 
 
 ## Options Considered
+
 | 选项 | 优点 | 缺点 | 风险 |
 |------|------|------|------|
 | A: ... | | | |
@@ -25,13 +26,17 @@ review_checkpoint: null
 | C: ... | | | |
 
 ## Choice
+
 **选定**: 
+
 
 ## Rationale
 <!-- 为什么选这个而不是其他 -->
 
+
 ## Expected Outcome
 <!-- 成功是什么样子 -->
+
 
 ## Review Checkpoint
 <!-- FSRS 复查日期: {{checkpoint_date}} -->
