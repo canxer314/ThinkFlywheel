@@ -42,10 +42,10 @@ claude
 
 ### `obsidian: command not found` 或 CLI 命令无效
 
-**原因**：Obsidian 版本低于 1.12.7，或 CLI 未启用。
+**原因**：Obsidian 版本低于 1.12，或 CLI 未启用。
 
 **修复**：
-1. 检查 Obsidian 版本：Help → About，确认 ≥1.12.7
+1. 检查 Obsidian 版本：Help → About，确认 ≥1.12
 2. 启用 CLI：Settings → CLI → Enable CLI
 3. 重启 Obsidian 后验证：`obsidian help`
 

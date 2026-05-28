@@ -6,7 +6,7 @@
 
 ## 1. 前置条件
 
-### Obsidian ≥1.12.7
+### Obsidian ≥1.12
 
 下载安装 [Obsidian](https://obsidian.md)。启动后点击 "Open folder as vault"，选择本仓库的 `vault/` 目录。
 

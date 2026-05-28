@@ -23,6 +23,7 @@
 | "完成/做完了/复盘/retro" | 读取 `.claude/skills/retro/SKILL.md` |
 | "决策/选择/决定/decide" | 读取 `.claude/skills/decide/SKILL.md` |
 | "体检/检查/健康/health" | 读取 `.claude/skills/health/SKILL.md` |
+| "会议/处理会议/会议纪要/转录/meeting" | 读取 `.claude/skills/meeting/SKILL.md` |
 
 ## FSRS Engine
 

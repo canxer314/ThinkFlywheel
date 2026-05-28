@@ -34,7 +34,7 @@ ThinkFlywheel 是一套运行在 Obsidian + Claude Code 上的个人工作与生
 
 ### 前置条件
 
-1. **Obsidian ≥1.12.7** — [下载安装](https://obsidian.md), 打开 `vault/` 目录作为 Obsidian vault
+1. **Obsidian ≥1.12** — [下载安装](https://obsidian.md), 打开 `vault/` 目录作为 Obsidian vault
    - **验证**: 左侧文件列表应显示 `SCHEMA.md`、`Tasks/`、`Cards/` 等目录
    - **必须启用 CLI**：Settings → CLI → Enable, 然后终端运行 `obsidian help` 确认可用（所有 vault 文件操作通过 CLI 执行，Obsidian 桌面端需保持运行）
    - 推荐安装 **Dataview** 插件（MOC 和健康报告利用 frontmatter 生成动态表格）
@@ -373,7 +373,7 @@ ThinkFlywheel 不是另一个知识管理工具或任务管理器。它是**生�
 ## 常见问题
 
 **Q: 必须用 Obsidian 吗？**
-是的。Obsidian ≥1.12.7 是必需依赖——它不仅是 Markdown 浏览器和编辑器，其 CLI 是 vault 文件操作的强制通道（自动更新 wikilink、校验 frontmatter）。FSRS 引擎通过 Python CLI 独立运行。
+是的。Obsidian ≥1.12 是必需依赖——它不仅是 Markdown 浏览器和编辑器，其 CLI 是 vault 文件操作的强制通道（自动更新 wikilink、校验 frontmatter）。FSRS 引擎通过 Python CLI 独立运行。
 
 **Q: 数据安全吗？**
 所有数据以纯 Markdown 文件存储在本地，用 Git 做版本控制。没有云同步依赖（除非你自己配置）。

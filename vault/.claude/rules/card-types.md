@@ -25,7 +25,8 @@
 | `type/atomic` | `/note` 或 `/retro` 双提议 | **必须人工确认** |
 | `type/concept` | `/note` 或 `/ingest` 双提议 | **必须人工确认** |
 | `type/insight` | `/note` 或 `/retro` 双提议 | **必须人工确认** |
-| `type/reading` | `/ingest` 自动生成 | AI 自主（来源处理的自然产物） |
+| `type/reading` | `/ingest` 自动生成，`/meeting` 自动生成 | AI 自主（来源处理的自然产物） |
+| `type/reading` + `subtype: meeting` | `/meeting` 自动生成 | AI 自主（会议纪要，含结构化行动/决议/风险追踪） |
 | `type/decision` | `/decide` 交互式创建 | **必须人工确认** |
 | `type/moc` | AI 自主维护 | AI 自主（纯索引，无新知识） |
 | `type/review` | `/retro` 自动生成 | AI 自主（复盘的结构化记录） |
@@ -40,6 +41,7 @@
 | 概念 | `Cards/concepts/{Concept Name}.md` |
 | 洞察 | `Cards/insights/{Pattern Description}.md` |
 | 阅读 | `Cards/reading/{Source Title} — {Author} {YYYY-MM-DD}.md` |
+| 会议纪要 | `Cards/reading/{会议主题} — {YYYY-MM-DD}.md` |
 | 项目 | `Projects/active/{Project Name}.md` |
 | 决策 | `Decisions/DEC-{YYYY}-{NNN}.md`（NNN 为年度内序号，AI 自动分配） |
 | 简报 | `Daily/YYYY-MM-DD.md` |

@@ -2,7 +2,7 @@
 
 所有对 vault 文件的创建、读取、修改、移动、删除、属性变更必须通过 `obsidian` CLI 执行。禁止使用 Write/Edit/Bash 工具直接操作 `.md` 文件。
 
-> 需要 Obsidian 桌面端 ≥ 1.12.7 保持运行。CLI 通过 IPC 通信，第一个命令会自动启动 Obsidian。
+> 需要 Obsidian 桌面端 ≥ 1.12（正式版从 1.12.4 起）保持运行。CLI 通过 IPC 通信，第一个命令会自动启动 Obsidian。
 > Windows 用户注意：CLI 依赖 `Obsidian.com` 终端重定向器（随安装器自动注册到 PATH），直接调用 `Obsidian.exe` 会导致 IPC 失败（退出码 127）。
 
 ## 操作映射
@@ -73,8 +73,9 @@ obsidian properties file="文件名"        # 列出文件所有属性
 obsidian properties active              # 列出当前活动文件属性
 ```
 - 属性值通过 Obsidian 内部 API 校验类型
-- list 类型用逗号分隔：`value="[[A]], [[B]]"`
-- 所有属性命令默认操作当前活动文件，可用 `file` 或 `path` 指定目标
+- list 类型的 `value=` 分隔方式官方文档未明确说明，建议通过 `obsidian help property:set` 确认当前版本行为
+- `property:set` / `property:read` / `property:remove` 默认操作当前活动文件，可用 `file` 或 `path` 指定目标
+- `properties`（无参数）列出整个 vault 所有属性的统计，**不是**当前文件；需加 `active` flag 或 `file=` 才能查看特定文件属性
 
 ### 搜索
 ```bash
@@ -110,7 +111,9 @@ obsidian deadends                      # 死胡同文件（无出链）
 ```bash
 obsidian tags counts                   # 所有标签及计数
 obsidian tags file="文件名"             # 文件标签
-obsidian tag name="标签名"              # 单个标签详情及出现次数
+obsidian tag name="标签名"              # 单个标签基本信息
+obsidian tag name="标签名" total        # 返回出现次数
+obsidian tag name="标签名" verbose      # 包含文件列表及各文件出现次数
 ```
 
 ### 任务
