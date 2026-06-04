@@ -16,6 +16,82 @@
 
 ---
 
+## ⚠️ PowerShell 转义陷阱（重要）
+
+> 此节仅对 Windows + PowerShell 环境生效。Bash / zsh / WSL 用户不受此限制。
+
+### 核心规则
+
+**PowerShell 双引号字符串中，`\` 不是转义字符——转义字符是反引号 `` ` ``。**
+Bash 习惯的 `\"` 在 PowerShell 中会**截断字符串**并**保留字面反斜杠**：
+
+```powershell
+# ❌ 错误：Bash 习惯的转义（PowerShell 下会截断文件）
+obsidian create content="project: \"[[水膜灵智能体开发]]\""
+# 实际写入文件: project: \[[水膜灵智能体开发]]\
+# 同时: 字符串在第一个 `"` 截断，后续内容被当作新参数 → 文件被截断
+
+# ✅ 正确：反引号转义
+obsidian create content="project: `"[[水膜灵智能体开发]]`""
+
+# ✅ 正确：双引号转义（连写两个 `"`）
+obsidian create content="project: ""[[水膜灵智能体开发]]"""
+
+# ✅✅ 简单场景：单引号字符串（零转义）
+obsidian create content='project: "[[水膜灵智能体开发]]"'
+
+# ✅✅✅ 复杂内容（YAML + wikilink + 中文 + 多行）：PowerShell here-string
+$content = @'
+---
+type: task
+project: "[[水膜灵智能体开发]]"
+related_cards:
+  - "[[水膜灵AI智能体项目推进 — 2026-06-01]]"
+---
+'@
+obsidian create content=$content
+```
+
+### 决策表
+
+| 内容特征 | 推荐方式 |
+|----------|---------|
+| 短单行 + 无 `"` | `content="..."` 直接写 |
+| 短单行 + 含 `"` | 单引号 `'...'` 或反引号 `` `" `` |
+| 多行 + 无 `"` | `content="...\n..."`（`\n` 嵌入） |
+| 多行 + 含 `[[wikilink]]` 或 YAML `"..."` | **here-string `@'...'@`** |
+| 超长内容（>7KB CJK） | `obsidian eval` + Node `fs.readFileSync` |
+
+### 症状自检
+
+写入后发现以下任一情况 → 检查是否为 PowerShell 转义问题：
+
+| 症状 | 原因 |
+|------|------|
+| 字段值带残留 `\` 反斜杠（如 `project: \[[...]]\`） | `\"` 的 `\` 字面保留 |
+| 文件只有几行就结尾，丢失大量内容 | 字符串在第一个 `"` 截断 |
+| 字段值出现随机拼接的乱码 | 多个被截断的 token 被 CLI 串接 |
+| YAML 解析报错（Obsidian 看不到 tags） | wikilink 被破坏 |
+
+### 铁律：写后必须验证
+
+`obsidian create` / `obsidian append` 返回成功**不等于**内容正确。每次写入后必须：
+
+```powershell
+# 1. 检查行数（与预期对比）
+(Get-Content path="...").Count
+
+# 2. 抽样验证关键字段
+obsidian read path="..." | Select-String -Pattern "expected_pattern"
+
+# 3. 完整内容核对（关键文件）
+obsidian read path="..."
+```
+
+如果行数异常（远少于预期）→ 立刻 `overwrite` 修复，不要带病提交。
+
+---
+
 ## 核心操作
 
 ### 创建文件
@@ -51,6 +127,7 @@ obsidian read file="文件名"
 obsidian create name="文件名" content="修改后的完整内容" overwrite
 ```
 - 必须包含完整内容，不只是修改的部分
+- ⚠️ **写后必须验证**：见上方"PowerShell 转义陷阱 → 铁律：写后必须验证"
 
 ### 追加内容
 ```bash
@@ -263,5 +340,5 @@ obsidian restart                        # 重启 Obsidian
 - **多 vault**：如果终端不在 vault 目录内，用 `vault=<name>` 指定：`obsidian vault="ThinkFlywheel" read file="SCHEMA"`
 - **全局 vault 选项**：`vault=<name>` 可加在任何命令上，格式为 `obsidian vault="MyVault" search query="test"`
 - **特殊字符**：文件名含空格或特殊字符时用 `file="..."` 或 `path="..."` 引号包裹。
-- **多行内容**：使用 `\n` 表示换行，`\t` 表示 tab：`content="---\ntype: type/task\n---\n# 标题"`
+- **多行内容**：简单情况用 `\n` 表示换行、`\t` 表示 tab（例：`content="---\ntype: type/task\n---\n# 标题"`）；复杂 YAML + wikilink 内容**必须用 PowerShell here-string**（见 ⚠️ PowerShell 转义陷阱 节）
 - **active file 默认**：大部分命令省略 `file`/`path` 时默认操作 Obsidian 当前活动文件；若需明确指定文件，始终使用 `file=` 或 `path=`

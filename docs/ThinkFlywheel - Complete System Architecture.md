@@ -120,12 +120,10 @@ Vault/
 ├── Templates/               # Card templates for each type
 └── Attachments/             # Images, PDFs, files
 
-3.2 Card Types (11 types)
+3.2 Card Types (10 types)
 
 ┌──────────┬─────────────────┬──────────────────┬─────────────────────────────────┬────────────────────────┐
 │   Type   │ Frontmatter Tag │    Directory     │             Purpose             │    Template Source     │
-├──────────┼─────────────────┼──────────────────┼─────────────────────────────────┼────────────────────────┤
-│ Inbox    │ type/inbox      │ Inbox/           │ Unclassified fleeting thought   │ New (闪念收件箱)        │
 ├──────────┼─────────────────┼──────────────────┼─────────────────────────────────┼────────────────────────┤
 │ Task     │ type/task       │ Tasks/active/    │ Bulletproof 4-element task note │ New (防弹模板)         │
 ├──────────┼─────────────────┼──────────────────┼─────────────────────────────────┼────────────────────────┤
@@ -152,7 +150,6 @@ Vault/
 
 | Type     | Lifecycle States                                              |
 |----------|---------------------------------------------------------------|
-| inbox    | raw → converted (to task/note) or discarded                   |
 | task     | todo → doing → waiting → done → archived                     |
 | project  | active → paused → completed → abandoned                       |
 | flow     | active → deprecated (never "done")                            |
@@ -888,7 +885,7 @@ Not ideal for:
 ├─────────────────────┼──────────────────────────────────────┼─────────────────────────────────────────────────────┤
 │ Life coverage       │ Knowledge domains only               │ work, life, learning, health, finance, relationship │
 ├─────────────────────┼──────────────────────────────────────┼─────────────────────────────────────────────────────┤
-│ Card types          │ 8 (all knowledge-focused)            │ 11 (incl. task, project, inbox, flow, decision)     │
+│ Card types          │ 8 (all knowledge-focused)            │ 10 (incl. task, project, inbox, flow, decision)     │
 └─────────────────────┴──────────────────────────────────────┴─────────────────────────────────────────────────────┘
 
 14.2 vs agent-pmo

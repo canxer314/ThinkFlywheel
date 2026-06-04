@@ -1,10 +1,9 @@
 # 卡片类型与命名
 
-## 11 种卡片
+## 10 种卡片
 
 | type 标签 | 存储位置 | 说明 | 模板 |
 |-----------|----------|------|------|
-| `type/inbox` | `Inbox/` | 闪念收件箱 — 未分类的原始念头，等待 triage | `Templates/inbox.md` |
 | `type/task` | `Tasks/active/` | 暂时性任务笔记 — 防弹 4 要素 | `Templates/task.md` |
 | `type/project` | `Projects/active/` | 专案目标笔记 — 鸟瞰地图 | `Templates/project.md` |
 | `type/flow` | `Flows/{domain}/` | 永久型任务笔记 — SOP/流程/检查清单，永不关闭 | `Templates/flow.md` |
@@ -20,7 +19,6 @@
 
 | 卡片类型 | 写入通道 | 确认机制 |
 |----------|---------|---------|
-| `type/inbox` | 用户对话中自然触发，AI 直接写入 | 无需双提议（原始念头，非知识） |
 | `type/task` | `/task` 直接写入 | 无需双提议（行动容器，非知识） |
 | `type/project` | `/project` 直接写入 | 无需双提议（目标定义，人主导） |
 | `type/flow` | `/flow` 直接写入 + `/retro` 触发迭代 | 无需双提议（流程模板，非知识） |
@@ -37,7 +35,6 @@
 
 | 卡片类型 | 路径格式 |
 |---------|---------|
-| 闪念 | `Inbox/{YYYY-MM-DD HHmm} {一句话摘要}.md` |
 | 任务 | `Tasks/active/{A-F-O-T Title}.md` |
 | 流程 | `Flows/{domain}/{Flow Name}.md` — 名词性 + "流程"/"SOP"/"清单" |
 | 原子 | `Cards/atomics/{Concept Name}.md` |

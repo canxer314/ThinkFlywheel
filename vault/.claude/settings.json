@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(obsidian move *)",
+      "Bash(find \"Sources/archive/Project-Vault\" -type d -empty -delete 2>/dev/null && find \"Sources/archive/Project-Vault\" -type d 2>/dev/null || echo \"No dirs remain\")",
+      "Bash(find \"Sources/archive/Project-Vault\" -depth -type d -empty -delete 2>/dev/null; find \"Sources/archive/Project-Vault\" -type d 2>/dev/null; echo \"---done---\")",
+      "Bash(obsidian search:context query=\"Sources/archive/Project-Vault\")",
+      "Bash(obsidian property:set path=\"Projects/active/中咨科管智能体-售前项目概览.md\" name=type value=\"project\" type=text)",
+      "Bash(obsidian property:set path=\"Projects/active/中咨科管智能体-售前项目概览.md\" name=domain value=\"work\" type=text)",
+      "Bash(obsidian property:set path=\"Projects/active/中咨科管智能体-售前项目概览.md\" name=status value=\"active\" type=text)",
+      "Bash(obsidian property:set file=\"Projects/active/中咨科管智能体-售前项目概览.md\" name=type value=project type=text)",
+      "Bash(for f in \"Cards/concepts/中船风电-排班模块技术可行性评估.md\" \"Cards/concepts/民航数字底座-商务报价.md\" \"Cards/concepts/中船风电-商务报价.md\"; do echo \"=== $f ===\"; head -5 \"$f\" 2>/dev/null; done)",
+      "Bash(obsidian append *)",
+      "Bash(obsidian unresolved *)",
+      "Bash(for f in \"Tasks/active/\"*.md; do echo \"=== $\\(basename \"$f\"\\) ===\"; head -20 \"$f\"; echo \"---\"; done)",
+      "Bash(for f in \"Projects/active/\"*.md; do echo \"=== $\\(basename \"$f\"\\) ===\"; head -25 \"$f\"; echo \"---\"; done)",
+      "Bash(obsidian search *)",
+      "Bash(obsidian --help)"
+    ]
+  }
+}
