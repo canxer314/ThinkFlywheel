@@ -1,6 +1,7 @@
 # 写作与标签规范
 
 ## 卡片内容标准
+- **inbox**: 原始念头，≤200 字，保留口语化表达，不加工——triage 时再判断去向
 - **atomic**: 单一概念，≤300 字，自包含（脱离上下文也能理解）
 - **concept**: 定义 + 要点 + 示例 + 相关卡片链接
 - **insight**: 触发情境 + 教训/模式 + 反模式（如适用）+ 适用范围
@@ -35,6 +36,7 @@ mastery/{level}         # 掌握程度（atomic 卡片必填，其他可选）
 
 | 卡片类型 | 可用 status |
 |----------|------------|
+| inbox | `raw` `converted` `discarded` |
 | task | `todo` `doing` `waiting` `done` `archived` |
 | project | `active` `paused` `completed` `abandoned` |
 | flow | `active` `deprecated` |

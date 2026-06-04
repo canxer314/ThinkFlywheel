@@ -24,6 +24,13 @@
 - `log.md`: 每次操作后追加 `## [YYYY-MM-DD] {operation} | {target}`
 - MOC: 检测到新卡片时自动添加到对应 domain 的 MOC
 
+## 闪念捕获
+- 用户表达模糊念头/观察/疑问，尚不满足任务或知识卡片的准入条件时 → 写入 `Inbox/{YYYY-MM-DD HHmm} {摘要}.md`
+- 格式：一句话原始念头 + 可选上下文（当时在做什么/什么触发）
+- 不加工、不分类、不联想——只是 capture
+- 用户自行 triage：转化为 /task 或 /note，或丢弃
+- Inbox 条目超过 30 天未处理 → `/health full` 会提示
+
 ## 源材料处理
 - 新文件出现在 `Sources/inbox/` 时，提醒用户可用 /ingest
 - /ingest 完成后，将源文件移至 `Sources/processed/`
