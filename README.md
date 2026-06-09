@@ -27,6 +27,7 @@ ThinkFlywheel 是一套运行在 Obsidian + Claude Code 上的个人工作与生
 | 想改系统配置 | [定制指南](docs/customization.md) |
 | 理解架构设计 | [完整架构文档（含深度分析）](docs/ThinkFlywheel%20-%20Complete%20System%20Architecture.md) |
 | 搭配增强技能 | [增强模式：planning-with-files + agentmemory](docs/integrations.md) |
+| 看版本更新记录 | [CHANGELOG](CHANGELOG.md) |
 
 ---
 
