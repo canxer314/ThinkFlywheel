@@ -126,6 +126,113 @@ arguments:
 
 ---
 
+## 3b. 使用社区插件（替代添加永久技能）
+
+如果某个方法论或技能你只想**临时使用**（如某个研究项目期间），或者**不确定是否长期保留**，不要修改 `vault/.claude/skills/`。用插件机制：
+
+### vs 添加永久技能
+
+| | 添加永久技能 (§3) | 使用插件 (§3b) |
+|---|---|---|
+| 存放位置 | `vault/.claude/skills/` | `vault/.claude-plugins/`（实例本地） |
+| 生效范围 | 永久，所有会话 | 加载后当前会话生效 |
+| 版本控制 | 进入 Git | 实例本地管理，不入仓库 |
+| 适合 | 确定要长期使用的技能 | 实验性方法论、临时研究框架 |
+| 影响核心文件 | 需修改 CLAUDE.md 路由表 | 不修改任何核心文件 |
+
+### 安装社区插件
+
+从 ThinkFlywheel 仓库的 `community-plugins/` 目录复制到你的 vault 实例：
+
+```bash
+# 从 ThinkFlywheel 仓库复制
+cp -r community-plugins/first-principles/ \
+     /path/to/YourVault/.claude-plugins/
+```
+
+### 激活
+
+在 Claude Code 会话中用短名加载（`custom-plugins.md` 规则提供发现）：
+
+```
+"加载 first-principles，然后分析 X"
+```
+
+Claude 自动定位、读取 manifest + rules + skill，当前会话生效。会话结束 = 自动卸载。
+
+### 创建自己的本地插件
+
+```bash
+mkdir -p .claude-plugins/my-methodology
+```
+
+最少创建 `manifest.md` + `rules.md`（见 `community-plugins/README.md` 完整约定）。不需要改任何核心文件。
+
+### 什么时候用插件 vs 永久技能
+
+- **用插件**：方法论框架、研究工具包、领域特定分析模板、实验性工作流
+- **用永久技能**（§3）：你确定要集成到日常循环中的、会反复使用的技能
+
+> 详细约定见 `community-plugins/README.md`。
+
+---
+
+## 3c. 使用 Playground 进行研究性工作
+
+当任务涉及复杂分析、多轮推理、临时脚本时，不要直接在 vault 的 `Cards/` 或 `Draft/` 中工作。用 `.playground/` 作为中间态工作区：
+
+### 概念
+
+```
+YourVault/
+├── .playground/              ← 研究中间态（Obsidian 不可见）
+│   ├── active/               ← 当前进行中的研究会话
+│   │   └── {session-name}/
+│   │       ├── context.md    ← 从 vault 拉取的相关材料引用
+│   │       ├── working/      ← 中间分析、草稿、脚本
+│   │       └── conclusions.md ← 最终结论（待回写 vault）
+│   └── archived/             ← 已完成的研究会话
+```
+
+### 数据流：单向门
+
+```
+vault (Cards/Tasks/Sources)  ──读取──→  .playground/  ──结论──→  vault (/note 双提议)
+                                  ❌ 中间产物绝不回写           ✅ 只有结论回写
+```
+
+**关键原则**：playground 里的东西不是知识——它们是知识的**原材料**。只有经过 `/note` 双提议确认的结论才进入 vault。
+
+### 启动研究会话
+
+```
+"用 .playground/ 开始研究 Q3 产品方向"
+```
+
+Claude 自动：
+1. 在 `.playground/active/` 创建会话目录
+2. 搜索 vault 中相关任务、卡片、决策 → 写入 `context.md`（只存 wikilink 引用，不复制全文）
+3. 后续所有分析在 playground 内推进
+
+### 完成研究会话
+
+- 结论成形 → 写入 `conclusions.md`
+- 核心洞察 → 通过 `/note` 双提议回写到 vault
+- 会话目录 → 移到 `.playground/archived/`（建议保留 30 天再删）
+
+### 与现有目录的分工
+
+| 目录 | 角色 | 存什么 |
+|------|------|--------|
+| `.playground/` | 研究中间态 | 草稿推理、临时脚本、未定论分析 |
+| `Draft/` | 闪念捕获 | 一句话原始念头（不加工） |
+| `.planning/` | 执行追踪（planning-with-files） | Phase 进度、决策记录 |
+| `Cards/` | 正式知识 | 双提议确认后的卡片 |
+
+> 完整约定见 `docs/playground.md`。
+
+---
+
 ## 4. 自定义 /briefing 输出
 
 简报结构定义在 `vault/.claude/skills/briefing/SKILL.md` 的 Step 6 中。
