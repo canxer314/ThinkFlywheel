@@ -25,7 +25,7 @@ usage() {
 
 选项:
   -t, --target <path>     目标目录绝对路径 (必填)
-  -f, --force             强制覆盖已存在的目标目录
+  -f, --force             将已存在的目标目录移动到备份（而非删除）
   -u, --update            仅更新 .claude/ 基石文件
   -p, --with-plugins <..> 要预安装的插件名 (逗号分隔)
   -g, --init-git          初始化 Git 仓库
@@ -106,9 +106,12 @@ if $UPDATE; then
     ok "Update 模式：仅更新 .claude/ 基石文件"
 elif [[ -d "$TARGET" ]] && [[ -n "$(ls -A "$TARGET" 2>/dev/null)" ]]; then
     if $FORCE; then
-        warn "Force 模式：将覆盖 $TARGET"
-        rm -rf "$TARGET"
-        ok "已清理目标目录"
+        warn "目标目录已存在且非空: $TARGET"
+        warn "内容将被移动到备份目录（不会被永久删除）"
+        backup_dir="${TARGET}.backup-$(date +%Y%m%d-%H%M%S)"
+        mv "$TARGET" "$backup_dir"
+        ok "已备份到: $backup_dir"
+        ok "确认不再需要后手动删除: rm -rf '$backup_dir'"
     else
         err "目标目录已存在且非空: $TARGET"
         err "使用 --force 强制覆盖，或 --update 仅更新 .claude/"

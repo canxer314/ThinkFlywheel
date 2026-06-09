@@ -10,7 +10,7 @@
     目标目录的绝对路径（必填）
 
 .PARAMETER Force
-    强制覆盖已存在的目标目录
+    将已存在的目标目录移动到带时间戳的备份目录（而非永久删除），然后安装
 
 .PARAMETER Update
     仅更新 .claude/ 基石文件，不触碰用户数据
@@ -106,9 +106,13 @@ elseif ($targetNonEmpty -and -not $Force) {
     exit 1
 }
 elseif ($targetNonEmpty -and $Force) {
-    Write-Warn "Force 模式：将覆盖 $TargetPath"
-    Remove-Item -Recurse -Force $TargetPath -ErrorAction SilentlyContinue
-    Write-OK "已清理目标目录"
+    Write-Warn "目标目录已存在且非空: $TargetPath"
+    Write-Warn "内容将被移动到备份目录（不会被永久删除）"
+
+    $backupDir = $TargetPath + '.backup-' + (Get-Date -Format 'yyyyMMdd-HHmmss')
+    Move-Item $TargetPath $backupDir
+    Write-OK "已备份到: $backupDir"
+    Write-OK "确认不再需要后手动删除: Remove-Item -Recurse '$backupDir'"
 }
 else {
     Write-OK "目标目录: $TargetPath"

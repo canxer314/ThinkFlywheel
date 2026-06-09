@@ -102,7 +102,7 @@ cd thinkflywheel
 | 参数 | 说明 |
 |------|------|
 | `-TargetPath` / `-t` | 目标目录绝对路径（**必填**） |
-| `-Force` / `-f` | 强制覆盖已存在的目标目录 |
+| `-Force` / `-f` | 将已有目录移入 `.backup-*` 备份（不永久删除），然后安装 |
 | `-Update` / `-u` | 仅更新 `.claude/` 基石文件，不动用户数据 |
 | `-WithPlugins` / `-p` | 预安装插件名（逗号分隔），如 `first-principles` |
 | `-InitGit` / `-g` | 初始化 Git 仓库并做首次提交 |
