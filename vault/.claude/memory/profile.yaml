@@ -1,0 +1,47 @@
+# 用户画像 (Transparent Memory)
+#
+# 仅包含已确认的事实或从行为证据中高置信推断的模式。
+# 你可随时修改或删除任何条目。Agent 每次对话自动读取此文件。
+#
+# 字段说明:
+#   confidence: 0-1 (Agent 对该推断的确信程度)
+#   scope: 该偏好/模式在什么条件下成立
+#   evidence: 支撑该条目的证据来源
+#   last_confirmed: 上次确认日期
+
+profile:
+  identity:
+    role: "示例角色"
+    domains: ["示例领域A", "示例领域B"]
+    note: "以上为示例数据，请根据实际情况修改"
+
+  preferences:
+    communication:
+      style: "简洁直接，先结论后推导"
+      scope: "工作场景"
+      evidence: "对话交互模式"
+      confidence: 0.7
+      last_confirmed: null
+
+    analysis:
+      style: "实事求是，数据驱动决策"
+      scope: "项目评估和技术决策"
+      evidence: "vault insights 中的分析模式"
+      confidence: 0.8
+      last_confirmed: null
+
+  decision_patterns:
+    - pattern: "偏好用方法论框架分析问题"
+      evidence: "vault 中结构化分析卡片"
+      confidence: 0.6
+      last_confirmed: null
+
+    - pattern: "重视历史经验和教训的复用"
+      evidence: "vault 中 insight card + /retro 三向回流体系"
+      confidence: 0.7
+      last_confirmed: null
+
+  current_priorities:
+    - "示例项目 A"
+    - "示例项目 B"
+    note: "以上为示例数据，请确认并排序"

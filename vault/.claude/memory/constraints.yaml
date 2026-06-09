@@ -1,0 +1,28 @@
+# 全局约束 (Transparent Memory)
+#
+# 不可违反的边界。Agent 在任何建议中必须遵守。
+# 约束的权威来源是你或外部现实，Agent 只能记录和遵守，不能创建或修改。
+#
+# 字段说明:
+#   active: true/false — 是否当前生效
+#   scope: 该约束在什么场景下适用
+#   source: 约束的来源
+
+constraints:
+  - id: c-001
+    content: "面向领导的汇报和演示方案必须考虑 PPT 导出兼容性，不能只依赖 Web 交互界面"
+    scope: "所有面向领导的汇报场景"
+    source: "历史决策记录"
+    active: true
+
+  - id: c-002
+    content: "项目效益论证必须包含诚实 ROI 分析——识别并避免归因错误，不能为了通过审批而虚增 ROI"
+    scope: "所有项目可行性分析和立项论证"
+    source: "历史项目复盘洞察"
+    active: true
+
+  - id: c-003
+    content: "AI 应用方案必须绑定具体业务 KPI，拒绝'表面智能化'"
+    scope: "所有 AI/智能化方案设计"
+    source: "历史项目反模式总结"
+    active: true

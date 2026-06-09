@@ -15,6 +15,40 @@ arguments: []
 
 ## Behavior
 
+### Step 0: 处理上轮会话待审（Stop Hook 遗留）
+
+检查 Stop Hook 在上轮会话结束时留下的待处理标记。
+
+> **铁律：Step 0 必须调用 MCP 工具。** 单次 transcript 文件只覆盖最近一次会话，MCP 覆盖全部历史。跳过 MCP = 丢失跨会话模式检测。看到 transcript 路径就跳过 MCP 是本步骤最常见的错误。
+
+1. 读取 `.claude/memory/.stop-state.json`
+2. 如果 `pending_review: true` 且 `last_session_file` 非空：
+   a. 读取 `last_session_file` 指向的会话骨架文件
+   b. **【强制】调用 AgentMemory MCP 召回上轮会话**（两步都必须执行）：
+      - `memory_sessions` → 列出最近 5 个 session，了解近期会话密度和模式
+      - `memory_smart_search` 查询上轮会话的主题关键词（从骨架文件的 `session_id` 或用户查询中提取）→ 跨所有历史 session 召回相关内容
+   c. **【可选补充】读取 transcript 文件**（骨架 frontmatter 中的 `transcript` 路径）——仅当 MCP 召回结果不足以还原会话细节时。优先信任 MCP 的跨会话视角。
+   d. **填写会话摘要**：综合 MCP 召回 + transcript（如有），填写：
+      - 关键决策（如有）
+      - 新建/修改的文件列表
+      - Agent 被纠正的情况（如有）
+      - 新用户 assertion（如有）
+   e. **检测新 assertion → 对比 profile.yaml**：
+      - 如果用户在会话中表达了新的偏好/优先级/决策模式 → 与 profile.yaml 现有条目对比
+      - 如有冲突 → 在简报中提醒用户确认："⚠️ 检测到可能与 profile 冲突的新信息：[具体内容]。需要更新 profile.yaml 吗？"
+      - 如无冲突但值得记录 → 提议添加并展示建议条目
+   f. **检测 Agent 被纠正 → 写 agent-log**：
+      - 如果用户在本会话中纠正了 Agent 的错误 → 按 agent-log 格式追加教训条目
+      - 格式：`- **错误**: {具体错误} → **原因**: {根因} → **教训**: {避免方法} → **tags**: #{标签}`
+   g. **检测新约束声明 → 提醒确认**：
+      - 如果用户表达了新的硬性约束或边界 → 提醒："⚠️ 检测到可能的新约束：[具体内容]。需要加入 constraints.yaml 吗？"
+   h. **同步到 AgentMemory MCP**：将确认的事实调用 `memory_save` 存入 MCP
+   i. 将会话骨架的 `status` 改为 `reviewed`，更新 `ended` 为实际完成时间
+   j. 设置 `.stop-state.json` 的 `pending_review: false`
+3. 如果 `pending_review: false` 或文件不存在 → 跳过，正常执行后续步骤
+
+> **注意：** Step 0 不自动修改 profile.yaml 或 constraints.yaml——只提议，等待用户确认。agent-log.md 的写入需基于明确可识别的纠正事件，不臆造。
+
 ### Step 1: 扫描活跃任务
 
 读取 `Tasks/active/` 下所有任务笔记，提取：

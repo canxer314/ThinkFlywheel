@@ -153,9 +153,4 @@ todo → doing → waiting → done → archived
 
 ## 与三层任务架构的协作
 
-- **永久型任务笔记 (type: flow)** — 反复执行的 SOP,通过 `flow` 字段被本任务引用
-- **专案目标笔记 (type: project)** — 多任务集合,通过 `project` 字段被本任务引用
-- **本任务 (type: task)** — 执行单元,完成后经验通过 `/retro` 三向回流:
-  1. 通用方法 → 原子卡片
-  2. 流程经验 → 回写到 [[flow]]
-  3. 专案洞察 → 回写到 [[project]] 的经验区
+> Task 引用 Flow（flow 字段）和 Project（project 字段）。完成后 /retro 三向回流：原子卡片 + Flow 经验 + Project 洞察。

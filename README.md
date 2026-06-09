@@ -115,21 +115,33 @@ Step 5: 看飞轮效果
 ## 系统架构
 
 ```
-+==================================================+
-| L4: GOVERNANCE     /health  /decide              |
-| AI 扫描：断链、孤儿卡片、知识-行动断层、领域失衡 |
-+==================================================+
++==========================================================+
+| L4: GOVERNANCE     /health  /decide  /briefing            |
+| AI 扫描：断链、孤儿卡片、知识-行动断层、领域失衡           |
++==========================================================+
     |                    |                    |
     v                    v                    v
 +----------------+ +----------------+ +----------------+
 | L3: TASK       | | L2: KNOWLEDGE  | | L1: MEMORY     |
 | 防弹笔记法      | | LLM Wiki       | | FSRS-6 间隔重复|
 | /task /project | | /note /ingest  | | /review        |
-| /retro         | | /query         | |                |
+| /flow /meeting | | /query         | |                |
+| /retro         | |                | |                |
 | "要做什么"      | | "我知道什么"    | | "我记住什么"    |
 +----------------+ +----------------+ +----------------+
+    |                    |                    |
+    +--------------------+--------------------+
+                         |
+                         v
+              +--------------------------+
+              | L0: AGENT CONTEXT        |
+              | Transparent Memory + MCP |
+              | profile / constraints    |
+              | agent-log / sessions     |
+              | "Agent 对你的已知事实"    |
+              +--------------------------+
 
-三层通过 Markdown 文件 + YAML frontmatter 双向流动，Git 版本控制。
+四层通过 Markdown 文件 + YAML frontmatter + Hooks 双向流动，Git 版本控制。
 ```
 
 **这不是上下堆叠，是飞轮。** 任务完成产生洞察 (/retro)，洞察进入记忆 (/review)，记忆浮现于晨报 (/briefing)，晨报指导新任务——每一圈都让下一圈更轻松。
@@ -139,11 +151,11 @@ Step 5: 看飞轮效果
 ## 核心工作流
 
 ```
-早晨 /briefing  →  看今日任务 + 到期复习卡片
+早晨 /briefing  →  看今日任务 + 到期复习卡片 + 触发流程
    ↓
-执行 /task      →  做事，遇到问题记入"问题与吐槽"
+执行 /task      →  做事，/flow 提供 SOP，/meeting 记录会议
    ↓
-完成 /retro     →  提取教训为原子卡片
+完成 /retro     →  提取教训为原子卡片，回写 Flow 经验
    ↓
 复习 /review    →  卡片进入 FSRS-6 间隔重复
    ↓
@@ -161,13 +173,15 @@ Step 5: 看飞轮效果
 
 ---
 
-## 10 个技能
+## 12 个技能
 
 ### 每日节奏：什么时候用哪个
 
 ```
 早晨刚坐下   → /briefing   每天唯一必跑
 开始做一件事 → /task       新任务、新想法、别人交代的事
+开了一个会议 → /meeting    记录会议纪要、行动项、决议
+建立标准流程 → /flow       固化 SOP/检查清单/流程模板
 读了一篇文章 → /ingest     处理成阅读摘要 + 提取知识点
 对话中学到了 → /note       双提议提取, 存为卡片
 做完了一件事 → /retro      复盘 + 提取知识（关键桥接）
@@ -185,6 +199,8 @@ Step 5: 看飞轮效果
 |------|--------|-----------|------|
 | `/task` | "new task" "创建任务" "要做X" | 开始任何新工作, 想到要做的事 | 创建防弹 4 要素任务笔记 |
 | `/project` | "project" "goal" "目标" "新项目" | 多任务协同, 想追踪整体进度 | 里程碑 + 进度脉搏 + 风险日志 |
+| `/flow` | "flow" "流程" "SOP" "常做的事" | 建立可复用的标准操作流程 | 固化 SOP/检查清单，关联 task |
+| `/meeting` | "meeting" "会议" "转录" | 开完会需要记录和跟进 | 结构化会议纪要 + 行动项追踪 |
 | `/briefing` | "briefing" "今天" "晨报" "早上好" | 每天第一次打开 Claude Code | 生成每日上下文简报 |
 
 ### 知识组
@@ -213,12 +229,13 @@ Step 5: 看飞轮效果
 
 ## 卡片类型
 
-系统中所有内容以 9 种卡片形式存在：
+系统中所有内容以 10 种卡片形式存在：
 
 | 卡片类型 | 存储位置 | 示例 |
 |---------|---------|------|
 | **Task** | `Tasks/active/` | "Q3 OKR 制定" |
 | **Project** | `Projects/active/` | "学会 Rust" |
+| **Flow** | `Flows/{domain}/` | "周报撰写流程" |
 | **Atomic** | `Cards/atomics/` | "SBI 反馈模型" (进入 SR) |
 | **Concept** | `Cards/concepts/` | "决策矩阵" |
 | **Insight** | `Cards/insights/` | "周末部署更容易出错" |
@@ -245,6 +262,34 @@ ThinkFlywheel 采用三级自主权，避免 AI 过度操作：
 
 ---
 
+## Transparent Memory — Agent 已知事实层
+
+为了不让 AI 每次都从空白开始，ThinkFlywheel 引入了 **Transparent Memory (TM)**——Agent 在每次对话中自动携带的、关于你的最小化真相集。
+
+### TM 的四份文件
+
+| 文件 | 内容 | 谁维护 | 注入时机 |
+|------|------|--------|---------|
+| `profile.yaml` | 用户画像：角色、偏好、决策模式、当前优先事项 | 你审核，Agent 提议 | 每条消息前 |
+| `constraints.yaml` | 全局约束：Agent 在任何建议中必须遵守的硬边界 | 你定义，Agent 只读 | 每条消息前 |
+| `agent-log.md` | Agent 犯过的错和学到的教训，防止重复犯错 | Agent 自动写入 | 每条消息前 |
+| `commitments.yaml` | Agent 未完成的承诺和待办 | Agent 自动写入，你定期清理 | 每条消息前 |
+
+### 三级 Hook 自动化
+
+```
+会话启动  →  UserPromptSubmit Hook  →  注入 TM 四件套到 Agent 上下文
+会话退出  →  Stop Hook              →  写会话骨架 + 标记 pending_review
+上下文压缩 →  PreCompact Hook        →  记录压缩元数据，防止信息丢失
+下次简报  →  /briefing Step 0       →  读取骨架 + MCP 召回 + 检测冲突 + 提议 TM 更新
+```
+
+### 冲突解决
+
+当 TM 与其他信息源矛盾时，优先级：**你当场说的话 > Obsidian vault > TM > AgentMemory MCP**
+
+---
+
 ## 增强模式：planning-with-files + agentmemory
 
 ThinkFlywheel 的 10 个技能管理的是**人的工作和生活**。搭配以下两个 Claude Code 生态技能，覆盖范围从"人脑"扩展到"AI Agent 大脑"，形成完整的**人-AI 协作记忆栈**：
@@ -254,7 +299,7 @@ ThinkFlywheel 的 10 个技能管理的是**人的工作和生活**。搭配以�
 | **planning-with-files** | 复杂多步骤任务怎么不跑偏？AI 的执行进度放哪？ | Agent 工作内存 — phase 追踪、发现记录、3-strike 错误恢复 |
 | **agentmemory** | 会话间上下文怎么不丢失？`/clear` 后怎么恢复？上次做了什么？ | Agent 长期记忆 — 会话历史、提交溯源、语义召回 |
 
-### 三系统记忆分工
+### 四系统记忆分工
 
 ```
 ┌──────────────────────────────────────────────┐
@@ -262,6 +307,11 @@ ThinkFlywheel 的 10 个技能管理的是**人的工作和生活**。搭配以�
 │ /task /project /note /retro /review          │
 │ "我知道什么、我在做什么、我记住了什么"          │
 │ 存储: Obsidian vault (Markdown + Git)        │
+├──────────────────────────────────────────────┤
+│ Transparent Memory (Agent 已知事实层)          │
+│ profile.yaml / constraints.yaml / agent-log  │
+│ "用户是谁、边界在哪、犯过什么错"                │
+│ 存储: vault/.claude/memory/ (Git 版本控制)    │
 ├──────────────────────────────────────────────┤
 │ planning-with-files (Agent 工作内存)          │
 │ task_plan.md / findings.md / progress.md     │
@@ -296,6 +346,14 @@ vault/
 ├── index.md               # 内容索引（AI 自动维护）
 ├── log.md                 # 时间线日志（AI 自动追加）
 ├── .claude/
+│   ├── hooks/             # 自动化 Hook 脚本（UserPromptSubmit / Stop / PreCompact）
+│   ├── skills/            # 12 个技能的 SKILL.md 定义
+│   ├── memory/            # Transparent Memory — Agent 已知事实层
+│   │   ├── profile.yaml       # 用户画像
+│   │   ├── constraints.yaml   # 全局约束
+│   │   ├── agent-log.md       # Agent 错误日志
+│   │   ├── commitments.yaml   # Agent 未完成承诺
+│   │   └── sessions/          # 会话摘要（Stop Hook 自动写入）
 │   └── rules/             # 操作规则（自动加载至 ground truth 层）
 │       ├── iron-laws.md       # 5 条铁律
 │       ├── autonomy.md        # 权限矩阵
@@ -303,11 +361,19 @@ vault/
 │       ├── workflows.md       # 标准操作流程
 │       ├── card-types.md      # 卡片类型与命名
 │       ├── structure.md       # 四层架构与目录
-│       └── obsidian-cli.md    # Obsidian CLI 强制规则
+│       ├── obsidian-cli.md    # Obsidian CLI 强制规则
+│       ├── execute-env.md     # 运行环境
+│       ├── toolcalling.md     # 工具调用规则
+│       └── no-post-hoc-reasoning.md  # 推理诚实性规则
+├── Inbox/                  # 闪念收件箱 — 未分类的原始念头
 ├── Tasks/                 # 防弹任务笔记
 │   ├── active/            # 进行中
 │   ├── waiting/           # 阻塞中
 │   └── archived/          # 已完成
+├── Flows/                 # 永久型任务笔记（SOP/流程库）
+│   ├── work/              # 工作类流程
+│   ├── life/              # 生活类流程
+│   └── learning/          # 学习类流程
 ├── Cards/                 # 知识卡片
 │   ├── atomics/           # SR 原子卡片
 │   ├── concepts/          # 概念定义
@@ -351,7 +417,7 @@ ThinkFlywheel 不是另一个知识管理工具或任务管理器。它是**生�
 | 每日整合 | 单独的 /review | 无 | /briefing 融合全部三层 |
 | 完成流程 | 无 | /close 只生成摘要 | /retro 自动提取原子卡片 |
 | 生活覆盖 | 知识领域 | 无 | 7 个生活领域 |
-| 技能数 | 8 | 15 | 10 |
+| 技能数 | 8 | 15 | 12 |
 
 ---
 

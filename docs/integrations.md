@@ -1,10 +1,10 @@
-# 增强模式：planning-with-files + agentmemory
+# 增强模式：Transparent Memory + planning-with-files + agentmemory
 
-> ThinkFlywheel 管理**人的**记忆。planning-with-files 管理 **Agent 的工作**记忆。agentmemory 管理 **Agent 的长期**记忆。三者组合形成完整的"人-AI 协作记忆栈"。
+> ThinkFlywheel 管理**人的**记忆。Transparent Memory 提供 **Agent 已知事实**。planning-with-files 管理 **Agent 的工作**记忆。agentmemory 管理 **Agent 的长期**记忆。四者组合形成完整的"人-AI 协作记忆栈"。
 
 ---
 
-## 1. 两个增强技能简介
+## 1. 增强技能简介
 
 ### planning-with-files
 
@@ -37,9 +37,33 @@ Claude Code 的持久化记忆 MCP 插件。记录每一次会话的观察、决
 | `commit-context` | 追溯某行代码/文件的变更来源（哪个会话、什么任务） |
 | `memory_save` | 显式保存洞察、决策、模式到长期记忆 |
 
+### Transparent Memory (TM)
+
+ThinkFlywheel 内置的 Agent 已知事实层。通过 Hook 系统在每个会话的每条消息前自动注入。
+
+四份文件：
+
+| 文件 | 内容 | 维护方式 |
+|------|------|---------|
+| `vault/.claude/memory/profile.yaml` | 用户画像：角色、偏好、决策模式 | 你审核，Agent 提议更新 |
+| `vault/.claude/memory/constraints.yaml` | 全局硬约束：Agent 不可违反的边界 | 你定义，Agent 只读 |
+| `vault/.claude/memory/agent-log.md` | Agent 犯过的错和教训 | Agent 自动写入 |
+| `vault/.claude/memory/commitments.yaml` | Agent 未完成的承诺 | Agent 自动写入 |
+
+三个 Hook 驱动 TM 生命周期：
+- **UserPromptSubmit** → 注入 TM 四件套到每条消息
+- **Stop** → 会话结束时写骨架，标记待 /briefing 分析
+- **PreCompact** → 上下文压缩时记录元数据
+
+**TM vs AgentMemory MCP 的区别**：
+- TM = 精准、可编辑、可审计的真相（存于 vault Git 版本控制）
+- MCP = 高覆盖、中精准的语义召回（存于 MCP 插件，不可直接编辑）
+
+冲突时 TM 优先级高于 MCP。
+
 ---
 
-## 2. 三系统如何协同
+## 2. 四系统如何协同
 
 ### 记忆分工
 
@@ -51,6 +75,14 @@ Claude Code 的持久化记忆 MCP 插件。记录每一次会话的观察、决
                     │    (人的工作生活管理)    │
                     └──────────┬───────────┘
                                │ 定义任务目标
+                               v
+                    ┌──────────────────────┐
+                    │    "Agent 知道什么？"   │
+                    │   Transparent Memory   │
+                    │   profile/constraints  │
+                    │   (Agent 已知事实层)     │
+                    └──────────┬───────────┘
+                               │ 约束 Agent 行为
                                v
                     ┌──────────────────────┐
                     │    "怎么一步步做？"     │
@@ -258,14 +290,14 @@ claude plugins install agentmemory
 
 不重复。`/task` 描述**要做什么**（目标、材料、行动、吐槽），面向人的理解。planning-with-files 描述 **AI 怎么做**（phase 拆分、技术决策、错误日志），面向 AI 的执行。前者在 Obsidian vault 里，后者在项目目录 `.planning/` 下。
 
-**Q: agentmemory 和 ThinkFlywheel 的 FSRS 不重复吗？**
+**Q: agentmemory 和 ThinkFlywheel 的 FSRS / TM 不重复吗？**
 
-不重复。FSRS-6 管理**人**的长期记忆（"SBI 反馈框架我记住了吗"）。agentmemory 管理 **AI** 的长期记忆（"上次那个 bug 是怎么修的"）。一个推入人脑，一个存放在 MCP 持久化层。
+不重复。FSRS-6 管理**人**的长期记忆（"SBI 反馈框架我记住了吗"）。TM 是 Agent 每次对话必读的**已知事实**（"用户是谁、边界在哪"），可编辑可审计。agentmemory 管理 **AI** 的长期记忆（"上次那个 bug 是怎么修的"），不可直接编辑。三个各司其职。
 
-**Q: 三个系统会不会太复杂？**
+**Q: 四个系统会不会太复杂？**
 
 按需渐进采用：
-- 先用 ThinkFlywheel 核心 10 技能（Phase 1-3）
+- 先用 ThinkFlywheel 核心 12 技能（Phase 1-3）
 - 复杂任务多了 → 加 planning-with-files（Phase 4-5 自然引入）
 - 会话多了，经常 `/clear` → 加 agentmemory
 
