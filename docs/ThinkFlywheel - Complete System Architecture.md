@@ -938,3 +938,63 @@ The three core fusion points that make this possible:
 1. Morning fusion (/briefing) — pulls task, knowledge, and memory layers into one actionable view
 2. Completion fusion (/retro) — converts action friction into reusable knowledge via 3-way回流
 3. Creation fusion (/task) — surfaces old knowledge automatically when creating new tasks
+
+---
+
+15. Transparent Memory Design Rationale: Why TM Is Not Rules or Skills
+
+TM (v0.4.0) introduces a new category of information that doesn't fit into the existing Rules or Skills framework. Understanding why TM is architecturally necessary — rather than just "more rules" — is key to understanding the system's evolution.
+
+15.1 The Epistemic Gap
+
+Rules and Skills are **normative**: they tell the Agent what it SHOULD do. "Don't delete files" is a command. The /task workflow is a procedure.
+
+TM is **declarative**: it tells the Agent what IS true. "The user prefers concise communication" is a fact about the world. The Agent doesn't receive it as a constraint — it receives it as context that shapes reasoning rather than restricting actions.
+
+This distinction is fundamental because the two types of information interact with the Agent's reasoning differently:
+- Rules directly limit the action space (cannot delete, must use CLI, must dual-propose)
+- TM facts shape the reasoning path (given the user's preference for structured analysis, a framework-based approach is more likely to be useful)
+
+15.2 Six Dimensions of Difference
+
+| Dimension | Rules | Skills | TM |
+|-----------|-------|--------|-----|
+| **Epistemic status** | Normative (commands) | Procedural (workflows) | Declarative (beliefs) |
+| **Growth mechanism** | Human writes → grows | Human writes → grows | Agent observes → infers → proposes → human confirms |
+| **Trust model** | Binary (100% correct) | Binary (100% correct) | Probabilistic (confidence ≥ 0.8 gate) |
+| **Error consequence** | Catastrophic (e.g., delete files) | Workflow breaks | Soft deviation (slightly off suggestion) |
+| **Update latency** | Days to weeks | Days to weeks | ~1 session |
+| **Author** | Human alone | Human alone | Agent infers, human confirms |
+
+15.3 What Each Can Do That the Others Cannot
+
+**Only Rules can:**
+- Encode absolute commands ("never delete files" — this cannot be inferred)
+- Define tool-level constraints (PowerShell escaping syntax in obsidian-cli.md)
+- Establish the permission matrix (autonomy.md — a security boundary)
+
+**Only Skills can:**
+- Encode complex multi-step workflows (/task has 5 steps, 6 failure modes, 6 anti-patterns)
+- Define cross-file coordination (/task creation triggers index/log/MOC/project updates)
+
+**Only TM can:**
+- Detect cross-session behavioral patterns (Agent notices the same preference across 5 sessions and proposes adding it to profile)
+- Prevent repeated mistakes (agent-log captures an error once, injects the lesson into every subsequent session)
+- Survive context compression (user profile compressed to ~500 tokens, persists across /clear)
+- Grow passively (the human doesn't write TM entries — they emerge from normal system use)
+
+15.4 Why the Distinction Matters
+
+Without TM, the Agent starts each session as a blank slate regarding the user. Rules ensure correct behavior; Skills ensure correct procedures. But neither answers "who is the user, what do they care about, and what have I already learned about working with them?"
+
+This gap is structural, not incidental. It exists because Rules and Skills were designed for **system correctness**, not **user context**. TM fills this gap by introducing a new information layer with different trust characteristics: probabilistic instead of binary, passively grown instead of manually authored, soft-failing instead of hard-failing.
+
+The three layers together form a complete Agent context stack:
+
+```
+Skills    → "How do I perform this operation?"
+Rules     → "What must I never do?"
+TM        → "Who am I doing this for?"
+```
+
+Each layer is architecturally irreducible — none can substitute for the others without losing a dimension of the Agent's understanding.
