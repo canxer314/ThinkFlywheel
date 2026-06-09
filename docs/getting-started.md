@@ -74,22 +74,64 @@ git add -A && git commit -m "init: ThinkFlywheel vault"
 
 ## 2. 安装
 
+ThinkFlywheel 提供安装脚本，将 `vault/` 模板复制到你的工作目录，自动创建扩展目录骨架（`.claude-plugins/`、`.playground/`），并验证前置条件。
+
+### 运行安装脚本
+
 ```bash
 # 1. 克隆仓库
 git clone <your-repo-url> thinkflywheel
 cd thinkflywheel
 
-# 2. 用 Obsidian 打开 vault/ 目录作为 vault（需启用 CLI）
+# 2. 运行安装脚本
+#    Windows (PowerShell):
+.\install.ps1 -TargetPath "C:\Obsidian\MyVault" -InitGit
 
-# 3. 安装 obsidian-skills（在 Claude Code 中执行一次）
-#    /plugin marketplace add kepano/obsidian-skills
-#    /plugin install obsidian@obsidian-skills
-#    /reload-plugins
-
-# 4. 进入 vault 目录启动 Claude Code
-cd vault
-claude
+#    macOS / Linux:
+./install.sh -t ~/Obsidian/MyVault --init-git
 ```
+
+脚本会自动：
+- 复制 vault/ 模板到目标目录（跳过用户特定的 Obsidian 配置文件）
+- 创建 `.claude-plugins/` 和 `.playground/` 骨架
+- 验证 Obsidian CLI、Python、Claude Code 是否可用
+- 按脚本输出的指引完成后续步骤
+
+### 完整参数
+
+| 参数 | 说明 |
+|------|------|
+| `-TargetPath` / `-t` | 目标目录绝对路径（**必填**） |
+| `-Force` / `-f` | 强制覆盖已存在的目标目录 |
+| `-Update` / `-u` | 仅更新 `.claude/` 基石文件，不动用户数据 |
+| `-WithPlugins` / `-p` | 预安装插件名（逗号分隔），如 `first-principles` |
+| `-InitGit` / `-g` | 初始化 Git 仓库并做首次提交 |
+| `-SkipVerify` / `-s` | 跳过前置条件验证 |
+
+```bash
+# 示例：安装并预装插件
+.\install.ps1 -TargetPath "C:\Obsidian\MyVault" -WithPlugins first-principles -InitGit
+
+# 示例：更新已有实例的基石文件
+.\install.ps1 -TargetPath "C:\Obsidian\MyVault" -Update
+```
+
+### 脚本完成后的手动步骤
+
+1. **在 Obsidian 中打开目标目录**作为 vault
+   - Obsidian → Open folder as vault → 选择目标目录
+   - Settings → CLI → Enable CLI（必须启用）
+2. **安装 obsidian-skills**（在 Claude Code 中执行一次）
+   ```
+   /plugin marketplace add kepano/obsidian-skills
+   /plugin install obsidian@obsidian-skills
+   /reload-plugins
+   ```
+3. **进入目标目录启动 Claude Code**
+   ```bash
+   cd <目标目录>
+   claude
+   ```
 
 ---
 

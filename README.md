@@ -35,46 +35,50 @@ ThinkFlywheel 是一套运行在 Obsidian + Claude Code 上的个人工作与生
 
 ### 前置条件
 
-1. **Obsidian ≥1.12** — [下载安装](https://obsidian.md), 打开 `vault/` 目录作为 Obsidian vault
-   - **验证**: 左侧文件列表应显示 `SCHEMA.md`、`Tasks/`、`Cards/` 等目录
-   - **必须启用 CLI**：Settings → CLI → Enable, 然后终端运行 `obsidian help` 确认可用（所有 vault 文件操作通过 CLI 执行，Obsidian 桌面端需保持运行）
-   - 推荐安装 **Dataview** 插件（MOC 和健康报告利用 frontmatter 生成动态表格）
+1. **Obsidian ≥1.12** — [下载安装](https://obsidian.md)
 2. **Claude Code** — [安装 Claude Code](https://docs.anthropic.com/en/docs/claude-code)
-   - **验证**: 终端运行 `claude --version` 确认可执行
-3. **obsidian-skills** — 在 Claude Code 中安装，教会 Claude 正确的 CLI 语法和 OFM 格式
-   ```bash
-   # 在 vault/ 目录下启动 Claude Code 后执行：
-   /plugin marketplace add kepano/obsidian-skills
-   /plugin install obsidian@obsidian-skills
-   /reload-plugins
-   ```
-4. **Python 3.8+** — FSRS-6 间隔重复引擎需要（纯标准库，无外部依赖）
-   - **验证**: 运行 `python --version`（或 `python3 --version`）
+3. **Python 3.8+** — FSRS-6 间隔重复引擎需要（纯标准库，无外部依赖）
+
+### 安装
+
+```bash
+# 1. 克隆仓库
+git clone <your-repo-url> thinkflywheel
+cd thinkflywheel
+
+# 2. 运行安装脚本（将 vault/ 复制到你的工作目录）
+#    Windows:
+.\install.ps1 -TargetPath "C:\Obsidian\MyVault" -InitGit
+
+#    macOS / Linux:
+./install.sh -t ~/Obsidian/MyVault --init-git
+
+# 3. 按脚本输出的指引：打开 Obsidian → 安装 obsidian-skills → 启动 Claude Code
+```
 
 ### 2 分钟试跑
 
 ```bash
-# 1. 进入 vault 目录, 验证 CLI 可用（需 Obsidian 运行中）
-cd vault
-obsidian help    # 应显示 100+ 可用命令
+# 1. 进入安装目录, 验证 CLI 可用（需 Obsidian 运行中）
+cd "C:\Obsidian\MyVault"    # 替换为你的目标目录
+obsidian help                # 应显示 100+ 可用命令
 
 # 2. 启动 Claude Code
 claude
 
-# 3. Claude Code 启动后自动加载 .claude/rules/ 中的操作规则（铁律、权限、写作规范、
-#    卡片类型、目录结构、工作流、CLI 强制规则）。SCHEMA.md 和 AGENTS.md 作为参考文档按需查询。验证:
+# 3. Claude Code 启动后自动加载 .claude/rules/ 中的操作规则。验证：
 "系统里定义了哪些卡片类型？"
-# 预期: Claude 列举 9 种卡片类型
+# 预期: Claude 列举 10 种卡片类型
 
-# 3. 创建第一个防弹任务笔记
+# 4. 创建第一个防弹任务笔记
 /task 整理本周工作优先级
 # 预期: 在 Tasks/active/ 下创建带 4 要素的笔记, AI 自动从 vault 搜索相关知识填入材料堆
 
-# 4. 生成今日上下文简报
+# 5. 生成今日上下文简报
 /briefing
-# 预期: 生成 Daily/YYYY-MM-DD.md, 包含活跃任务 + 到期复习 + 项目健康（初期内容较少是正常的）
+# 预期: 生成 Daily/YYYY-MM-DD.md, 包含活跃任务 + 到期复习 + 项目健康
 
-# 5. 快速系统体检
+# 6. 快速系统体检
 /health quick
 # 预期: 多维度健康报告, 综合评分（初期有很多"警告"是正常的）
 ```
