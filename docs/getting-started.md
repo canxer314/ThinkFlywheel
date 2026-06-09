@@ -141,7 +141,7 @@ Claude Code 启动后自动加载 `vault/.claude/rules/` 中的操作规则（�
 
 | 命令 | 预期结果 |
 |------|---------|
-| `SCHEMA.md 里定义了哪些卡片类型？` | Claude 列举 9 种类型 |
+| `SCHEMA.md 里定义了哪些卡片类型？` | Claude 列举 10 种类型 |
 | `ls vault/Templates/` | 看到 9 个 .md 模板文件 |
 | `python .obsidian/scripts/fsrs_engine.py .obsidian/review_state.json stats` | 输出 JSON，total_cards 为 0 |
 
