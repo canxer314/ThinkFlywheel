@@ -4,6 +4,34 @@ ThinkFlywheel（知行飞轮）个人认知复利引擎的版本演进记录。�
 
 ---
 
+## [0.5.0] — 2026-06-09 · Extension System & Install
+
+> **主题**: 系统可以动态扩展了——方法论插件按需加载，研究过程有独立工作区，安装一键完成。
+
+### Added
+- **插件扩展机制**: `community-plugins/` 目录作为可选插件源，每个插件自包含 manifest.md + rules.md + skill.md
+  - 示例插件 `first-principles`: 第一性原理分析（8 条推理规则 + `/first-principles` 技能）
+  - `vault/.claude/rules/custom-plugins.md` — 插件发现与加载规则（短名映射、列出、加载、卸载）
+  - 插件会话级生效，不加载零开销，不污染 `.claude/` 基石
+- **Playground 研究中间态工作区**: `.playground/active/` + `.playground/archived/` 目录约定
+  - 单向数据流：从 vault 读取材料引用 → playground 内推理 → 仅结论通过 `/note` 双提议回写 vault
+  - Obsidian 不可见（`.playground/` 隐藏目录），保持 vault 信噪比
+  - 与 `Draft/`（闪念捕获）和 `.planning/`（执行追踪）明确分工
+- **安装脚本** `install.ps1` + `install.sh`: 一键从模板仓库创建 vault 实例
+  - 复制 vault/ 模板（跳过用户特定 `.obsidian/` 配置文件）
+  - 创建 `.claude-plugins/` 和 `.playground/` 骨架
+  - `-Update` 模式：仅更新 `.claude/` 基石，保留 TM 数据 + 用户插件 + 用户数据
+  - `-WithPlugins` 按需预装插件 + `-InitGit` 初始化版本控制
+  - 前置条件验证（Obsidian CLI / Python 3.8+ / Claude Code）
+
+### Changed
+- `docs/customization.md`: 新增 §3b（使用社区插件）和 §3c（使用 Playground 进行研究性工作）
+- `docs/getting-started.md`: §2 安装步骤从手动改为运行安装脚本，补充完整参数表
+- `README.md`: 快速开始节简化为 clone → install → 打开 Obsidian → 启动 Claude Code
+- 卡片类型数统一为 10（修复 getting-started.md 中遗留的 "9 种" 引用）
+
+---
+
 ## [0.4.0] — 2026-06-09 · Transparent Memory
 
 > **主题**: Agent 不再每次从零开始认识你。
