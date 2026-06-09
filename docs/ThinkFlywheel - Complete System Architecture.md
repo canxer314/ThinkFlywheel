@@ -57,7 +57,7 @@ Vault/
 ├── index.md                 # Content-oriented index (AI-maintained)
 ├── log.md                   # Chronological log (AI-appended)
 │
-├── Inbox/                   # Fleeting thought capture -- unclassified raw ideas, awaiting triage
+├── Draft/                   # Fleeting thought capture -- unclassified raw ideas, awaiting triage
 │
 ├── Tasks/                   # BULLETPROOF TASK NOTES -- the hub
 │   ├── active/              # In-progress: one note per task
@@ -281,7 +281,7 @@ Gate check (Step 0): Before creating, AI validates against Esor's four filters:
 3. Multi-step: does it need 2+ steps? (single-step actions → just do it)
 4. Information integration: does it require pulling from multiple sources?
 
-If the idea fails these filters but is worth keeping → write to Inbox/ instead, for later triage.
+If the idea fails these filters but is worth keeping → write to Draft/ instead, for later triage.
 
 
 ---
@@ -302,7 +302,7 @@ If the idea fails these filters but is worth keeping → write to Inbox/ instead
    - Due Review Cards (cross-referenced to active tasks)
    - Project Health
    - Historical Warnings (similar past tasks' pitfalls)
-   - Inbox Count (unprocessed fleeting thoughts)
+   - Draft Count (unprocessed fleeting thoughts)
 6. Write briefing to Daily/YYYY-MM-DD.md
 
 **Why this matters:** This is the key "fusion point" where all 3 layers converge into one actionable morning view. It solves the problem all 10 reports identified: review is disconnected from tasks, and tasks are disconnected from knowledge.
@@ -584,13 +584,13 @@ This is MORE autonomous than knowledge-mgmt (adds autonomous MOC, index, log, an
 - Requiring dual-proposal for task creation adds friction that defeats the purpose (防弹笔记 is about speed and momentum)
 - The quality gate applies at /retro time -- when tasks complete and insights are extracted
 
-### 6.7 Fleeting Thought Capture — Inbox without Automation
+### 6.7 Fleeting Thought Capture — Draft without Automation
 
 **Context:** GTD-style universal inbox vs. direct-to-task vs. no inbox at all.
 
-**Decision:** Add Inbox/ directory as a lightweight capture zone with no dedicated skill. Rationale:
+**Decision:** Add Draft/ directory as a lightweight capture zone with no dedicated skill. Rationale:
 - Some thoughts are too vague for /task (fail the four-filter gate check) or /note (unverified, unprocessed)
-- Writing directly to Inbox/ keeps capture friction near zero — user just speaks the thought
+- Writing directly to Draft/ keeps capture friction near zero — user just speaks the thought
 - Triage is manual, on the user's own schedule: convert to /task, /note, or discard
 - No automation, no new command — just a directory, a template, and a convention
 

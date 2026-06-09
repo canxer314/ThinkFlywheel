@@ -382,7 +382,7 @@ vault/
 │       ├── execute-env.md     # 运行环境
 │       ├── toolcalling.md     # 工具调用规则
 │       └── no-post-hoc-reasoning.md  # 推理诚实性规则
-├── Inbox/                  # 闪念收件箱 — 未分类的原始念头
+├── Draft/                  # 闪念收件箱 — 未分类的原始念头
 ├── Tasks/                 # 防弹任务笔记
 │   ├── active/            # 进行中
 │   ├── waiting/           # 阻塞中

@@ -24,7 +24,7 @@ ThinkFlywheel（知行飞轮）个人认知复利引擎的版本演进记录。�
 
 ### Removed
 - `/estimation` skill（未使用）
-- `vault/Inbox/.gitkeep`
+- `vault/Draft/.gitkeep`
 
 ---
 
@@ -37,7 +37,7 @@ ThinkFlywheel（知行飞轮）个人认知复利引擎的版本演进记录。�
 - `settings.json` 纳入版本控制（Hook 配置）
 
 ### Changed
-- Inbox 卡片类型移除（11→10），同步更新 architecture docs、card-types rules、writing rules
+- Draft 卡片类型移除（11→10），同步更新 architecture docs、card-types rules、writing rules
 - YAML 多值字段改为标准列表格式
 - 完整架构文档合并深度分析
 

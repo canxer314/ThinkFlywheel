@@ -21,7 +21,7 @@ Vault/
 ├── index.md                  # 内容索引（AI 维护）
 ├── log.md                    # 时间线日志（AI 追加）
 │
-├── Inbox/                    # 闪念收件箱 — 未分类的原始念头，等待 triage
+├── Draft/                    # 闪念收件箱 — 未分类的原始念头，等待 triage
 │
 ├── Tasks/                    # 暂时性任务笔记 — 系统枢纽
 │   ├── active/               # 进行中：每任务一个笔记
